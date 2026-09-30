@@ -331,7 +331,7 @@ pub fn extract_metadata_with_registry(
                     details: message.clone(),
                     source: Some(Box::new(Error::UnsupportedDecoderVersion {
                         version_display: version.map(|v| v.to_string()),
-                        message: "no registered decoder matched this interface version".to_string(),
+                        message: message.clone(),
                     })),
                 });
             }

@@ -47,7 +47,7 @@ This compares the old build (`v1.wasm`) against the new build (`v2.wasm`) and re
   - [Validating a single contract spec (lint)](#validating-a-single-contract-spec-lint)
   - [Listing finding categories](#listing-finding-categories)
   - [Checking RPC connectivity (preflight)](#checking-rpc-connectivity-preflight)
-  - [Printing the report JSON schema](#printing-the-report-json-schema)
+  - [Printing JSON schemas and completion](#printing-json-schemas-and-completion)
   - [Symlinked inputs](#symlinked-inputs)
   - [Fetching inputs over HTTPS](#fetching-inputs-over-https)
   - [Validating against historical versions (lineage tracking)](#validating-against-historical-versions-lineage-tracking)
@@ -128,7 +128,7 @@ flags.
 | `stream` | Runs in JSON Lines batch mode: reads one job per line on stdin and writes one result per line to stdout | `stream --help` |
 | `lint` | Checks one contract spec, and optionally a storage schema, for structural problems without comparing it to another build | [Lint rules reference](docs/lint_rules_reference.md) |
 | `preflight` | Checks RPC connectivity and the JSON-RPC response format without fetching any contract code | [RPC security checklist](docs/rpc-security-checklist.md) |
-| `print-schema` | Prints the JSON Schema of the `--format json` report to stdout and exits | [Printing the report schema](#printing-the-report-json-schema) |
+| `print-schema` | Prints JSON Schemas for reports, configs, manifests, or editor completion | [Printing JSON schemas and completion](#printing-json-schemas-and-completion) |
 
 ### Strict mode
 
@@ -548,35 +548,51 @@ checklist covering endpoint trust, credentials, and report retention.
 `--format json` emits a machine-readable summary of the three checks. The
 command exits non-zero when any check fails.
 
-### Printing the report JSON schema
+### Printing JSON schemas and completion
 
-`print-schema` writes the JSON Schema describing the `--format json` report
-document to stdout and exits — no WASM inputs, no config, and no network
-access:
+`print-schema` writes machine-readable JSON Schemas (Draft-07), editor completion catalogs, or reference documentation directly from the running binary — no WASM inputs, no config, and no network access:
 
 ```bash
+# Print report JSON Schema (default)
 soroban-upgrade-safeguard print-schema
 
-# Single-line output, e.g. to pipe into another tool
-soroban-upgrade-safeguard print-schema --compact
+# Print configuration file JSON Schema (.safeguard.toml / JSON)
+soroban-upgrade-safeguard print-schema --config
+
+# Print batch manifest JSON Schema
+soroban-upgrade-safeguard print-schema --manifest
+
+# Generate editor autocomplete & hover catalog
+soroban-upgrade-safeguard print-schema --config --completion
+
+# Generate markdown reference documentation
+soroban-upgrade-safeguard print-schema --config --markdown
+
+# Single-line output, e.g. to pipe into jq or another tool
+soroban-upgrade-safeguard print-schema --config --compact
 ```
 
-The schema is generated from the same `serde` types that produce every
-report, so a consumer that fetches it from the running binary is validating
-against exactly what that binary emits — there is no file in the repository
-to locate, and no risk of the binary having moved on from a checked-in
-copy. It validates a live run directly:
+#### Schema Validation & Editor Integration
+
+All configuration files (`.safeguard.toml`, `--config`, and `--manifest`) are validated against their canonical schemas before execution begins. Unknown keys, invalid types, out-of-range bounds, and unrecognized enum variants are caught immediately with precise line, column, and field path diagnostics.
+
+To enable autocompletion, real-time diagnostics, and hover documentation in VS Code or any LSP-compatible editor, add `$schema` to your configuration:
+
+```toml
+"$schema" = "https://raw.githubusercontent.com/ShippedLabs/soroban-upgrade-safeguard/main/schemas/v1/safeguard-config.schema.json"
+
+[policy]
+severity = "error"
+```
+
+The report schema is generated from the same `serde` types that produce every report, so a consumer that fetches it from the running binary is validating against exactly what that binary emits:
 
 ```bash
 soroban-upgrade-safeguard ./wasm/v1.wasm ./wasm/v2.wasm --format json \
   | jsonschema --instanceof-jsonschema <(soroban-upgrade-safeguard print-schema)
 ```
 
-The schema carries the current `report_schema_version` as the default of the
-matching property, so tooling can pin consumers to the exact shape the
-binary in use produces. See the
-[JSON Schema documentation](docs/documentation.md#json-schema) for the
-fuller description of the schema itself.
+See [Configuration Schema & Compatibility](docs/config_schema_compatibility.md) for the configuration and manifest schema reference, editor catalogs, and forward-compatibility policy. See [Report Schema Compatibility](docs/report_schema_compatibility.md) for report schema evolution.
 
 ### Symlinked inputs
 
@@ -1530,6 +1546,7 @@ More detailed guides live in the [docs](docs/) folder. See the [Documentation In
 - [Compatibility Budgets](docs/compatibility_budgets.md): per-axis and per-rule compatibility budgets, how they are declared, and how budget exhaustion affects the run verdict.
 - [Named Policy Profiles](docs/named_policy_profiles.md): selecting named policy profiles from configuration and the CLI to apply pre-defined sets of compatibility rules.
 - [Configuration Resolution](docs/config-resolution.md): the precedence order for resolving a suppression config — CLI flag, environment variable, and default file discovery.
+- [Configuration Schema & Compatibility](docs/config_schema_compatibility.md): JSON Schemas for safeguard configuration and batch manifests, editor auto-completion catalog, and schema compatibility policy.
 
 ## License
 

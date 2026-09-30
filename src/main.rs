@@ -1162,10 +1162,29 @@ enum DoctorFormat {
 /// `print-schema`: emit the JSON Schema describing the report shape the
 /// running binary produces to stdout, then exit.
 ///
+/// Target schema to print.
+#[derive(clap::ValueEnum, Clone, Copy, Debug, PartialEq, Eq, Default)]
+#[value(rename_all = "kebab-case")]
+enum SchemaTarget {
+    #[default]
+    Report,
+    Config,
+    Manifest,
+}
+
+/// Output format for schema or metadata.
+#[derive(clap::ValueEnum, Clone, Copy, Debug, PartialEq, Eq, Default)]
+#[value(rename_all = "kebab-case")]
+enum PrintSchemaFormat {
+    #[default]
+    JsonSchema,
+    Completion,
+    Markdown,
+}
+
 /// Requires no WASM inputs and no network access: the schema is generated
-/// from the same `serde` types that produce every `--format json` report,
-/// so the document a consumer fetches with this command is identical to
-/// what the same build would validate a report against.
+/// from the canonical schemas, so the document a consumer fetches with this command
+/// is identical to what the same build would validate against.
 ///
 /// Exit code is `0` on success.
 #[derive(ClapArgs, Debug)]
@@ -1175,6 +1194,30 @@ struct PrintSchemaArgs {
     /// one-line tool.
     #[arg(long)]
     compact: bool,
+
+    /// Target schema to print: report (default), config, or manifest.
+    #[arg(long, value_enum, default_value_t = SchemaTarget::Report)]
+    target: SchemaTarget,
+
+    /// Shorthand to print the safeguard configuration schema (`--target config`).
+    #[arg(long)]
+    config: bool,
+
+    /// Shorthand to print the batch manifest schema (`--target manifest`).
+    #[arg(long)]
+    manifest: bool,
+
+    /// Output format: json-schema (default), completion, or markdown.
+    #[arg(long, value_enum, default_value_t = PrintSchemaFormat::JsonSchema)]
+    format: PrintSchemaFormat,
+
+    /// Shorthand to output editor completion and hover catalog (`--format completion`).
+    #[arg(long)]
+    completion: bool,
+
+    /// Shorthand to output Markdown documentation (`--format markdown`).
+    #[arg(long)]
+    markdown: bool,
 }
 
 fn rpc_config(url: &str, headers: &[String]) -> Result<RpcClientConfig> {
@@ -1640,20 +1683,124 @@ fn print_preflight_line(label: &str, success: bool, detail: Option<String>) {
 /// against — a tool that wants to validate a report it just produced can
 /// fetch the schema from the same binary that produced it.
 fn run_print_schema(args: &PrintSchemaArgs) -> Result<()> {
-    let value = report_schema::report_schema_value();
+    let target = if args.config {
+        SchemaTarget::Config
+    } else if args.manifest {
+        SchemaTarget::Manifest
+    } else {
+        args.target
+    };
+
+    let format = if args.completion {
+        PrintSchemaFormat::Completion
+    } else if args.markdown {
+        PrintSchemaFormat::Markdown
+    } else {
+        args.format
+    };
+
     let stdout = std::io::stdout();
     let mut handle = stdout.lock();
-    if args.compact {
-        let bytes = serde_json::to_vec(&value).context("serializing report schema to JSON")?;
-        handle
-            .write_all(&bytes)
-            .context("writing JSON schema to stdout")?;
-    } else {
-        let pretty =
-            serde_json::to_string_pretty(&value).context("serializing report schema to JSON")?;
-        handle
-            .write_all(pretty.as_bytes())
-            .context("writing JSON schema to stdout")?;
+
+    match (target, format) {
+        (SchemaTarget::Report, PrintSchemaFormat::Markdown) => {
+            let md = "# Report JSON Schema\n\nRun `print-schema` without flags to print the Draft-07 JSON Schema.\n";
+            handle
+                .write_all(md.as_bytes())
+                .context("writing markdown schema to stdout")?;
+        }
+        (SchemaTarget::Report, _) => {
+            let value = report_schema::report_schema_value();
+            if args.compact {
+                let bytes =
+                    serde_json::to_vec(&value).context("serializing report schema to JSON")?;
+                handle
+                    .write_all(&bytes)
+                    .context("writing JSON schema to stdout")?;
+            } else {
+                let pretty = serde_json::to_string_pretty(&value)
+                    .context("serializing report schema to JSON")?;
+                handle
+                    .write_all(pretty.as_bytes())
+                    .context("writing JSON schema to stdout")?;
+            }
+        }
+        (SchemaTarget::Config, PrintSchemaFormat::JsonSchema) => {
+            let schema = soroban_upgrade_safeguard::config_schema::config_schema();
+            if args.compact {
+                let bytes =
+                    serde_json::to_vec(&schema).context("serializing config schema to JSON")?;
+                handle
+                    .write_all(&bytes)
+                    .context("writing JSON schema to stdout")?;
+            } else {
+                let pretty = serde_json::to_string_pretty(&schema)
+                    .context("serializing config schema to JSON")?;
+                handle
+                    .write_all(pretty.as_bytes())
+                    .context("writing JSON schema to stdout")?;
+            }
+        }
+        (SchemaTarget::Config, PrintSchemaFormat::Completion) => {
+            let catalog = soroban_upgrade_safeguard::config_schema::generate_config_completion();
+            if args.compact {
+                let bytes = serde_json::to_vec(&catalog)
+                    .context("serializing config completion to JSON")?;
+                handle
+                    .write_all(&bytes)
+                    .context("writing completion catalog to stdout")?;
+            } else {
+                let pretty = serde_json::to_string_pretty(&catalog)
+                    .context("serializing config completion to JSON")?;
+                handle
+                    .write_all(pretty.as_bytes())
+                    .context("writing completion catalog to stdout")?;
+            }
+        }
+        (SchemaTarget::Config, PrintSchemaFormat::Markdown) => {
+            let md = soroban_upgrade_safeguard::config_schema::generate_config_markdown();
+            handle
+                .write_all(md.as_bytes())
+                .context("writing config markdown to stdout")?;
+        }
+        (SchemaTarget::Manifest, PrintSchemaFormat::JsonSchema) => {
+            let schema = soroban_upgrade_safeguard::config_schema::manifest_schema();
+            if args.compact {
+                let bytes =
+                    serde_json::to_vec(&schema).context("serializing manifest schema to JSON")?;
+                handle
+                    .write_all(&bytes)
+                    .context("writing JSON schema to stdout")?;
+            } else {
+                let pretty = serde_json::to_string_pretty(&schema)
+                    .context("serializing manifest schema to JSON")?;
+                handle
+                    .write_all(pretty.as_bytes())
+                    .context("writing JSON schema to stdout")?;
+            }
+        }
+        (SchemaTarget::Manifest, PrintSchemaFormat::Completion) => {
+            let catalog = soroban_upgrade_safeguard::config_schema::generate_manifest_completion();
+            if args.compact {
+                let bytes = serde_json::to_vec(&catalog)
+                    .context("serializing manifest completion to JSON")?;
+                handle
+                    .write_all(&bytes)
+                    .context("writing completion catalog to stdout")?;
+            } else {
+                let pretty = serde_json::to_string_pretty(&catalog)
+                    .context("serializing manifest completion to JSON")?;
+                handle
+                    .write_all(pretty.as_bytes())
+                    .context("writing completion catalog to stdout")?;
+            }
+        }
+        (SchemaTarget::Manifest, PrintSchemaFormat::Markdown) => {
+            let md = soroban_upgrade_safeguard::config_schema::generate_manifest_markdown();
+            handle
+                .write_all(md.as_bytes())
+                .context("writing manifest markdown to stdout")?;
+        }
     }
     handle.write_all(b"\n").ok();
     handle.flush().ok();
@@ -2982,6 +3129,8 @@ fn synthesize_error_report(
         complexity_new: None,
         complexity_delta: None,
         complexity_violations: Vec::new(),
+        manifest_verification: None,
+        manifest_gates_safety: false,
     }
 }
 
@@ -3414,6 +3563,8 @@ fn gap_to_result(gap: &GapContract, args: &Args) -> BatchResult {
         complexity_new: None,
         complexity_delta: None,
         complexity_violations: Vec::new(),
+        manifest_verification: None,
+        manifest_gates_safety: false,
     };
     BatchResult::Error {
         id: name.clone(),
@@ -5084,14 +5235,28 @@ fn error_chain(err: &dyn std::error::Error) -> String {
 fn validate_suppression_config(path: &Path) -> Result<()> {
     println!("Validating suppression config: {}", path.display());
 
+    let schema_check = soroban_upgrade_safeguard::config_schema::validate_config_file(path);
+
     // Parsing (and file-read) problems surface here as a clear, specific error.
     let config = match SuppressionConfig::load_from_path(path) {
         Ok(config) => config,
         Err(e) => {
             eprintln!("{}", format!("❌ {}", error_chain(&e)).red().bold());
+            if let Err(diags) = schema_check {
+                for d in diags {
+                    eprintln!("{}", format!("  {d}").red());
+                }
+            }
             std::process::exit(1);
         }
     };
+
+    if let Err(diags) = schema_check {
+        for d in diags {
+            eprintln!("{}", format!("❌ {d}").red());
+        }
+        std::process::exit(1);
+    }
 
     println!("  Parsed {} rule(s).", config.rules.len());
 

@@ -1775,6 +1775,8 @@ impl SafetyReport {
             complexity_new: None,
             complexity_delta: None,
             complexity_violations: Vec::new(),
+            manifest_verification: None,
+            manifest_gates_safety: false,
         }
     }
 
@@ -2128,6 +2130,8 @@ mod tests {
             complexity_new: None,
             complexity_delta: None,
             complexity_violations: Vec::new(),
+            manifest_verification: None,
+            manifest_gates_safety: false,
         };
 
         assert_eq!(report.recommended_bump(), "patch");
@@ -2223,10 +2227,17 @@ mod tests {
         manifest.features = Vec::new();
         let observed = sample_observed();
         let verification = verify_build_manifest(&manifest, &observed);
-        let missing: Vec<&str> = verification.missing.iter().map(|c| c.field.as_str()).collect();
+        let missing: Vec<&str> = verification
+            .missing
+            .iter()
+            .map(|c| c.field.as_str())
+            .collect();
         assert!(missing.contains(&"rust_version"));
         assert!(missing.contains(&"features"));
-        assert!(verification.verified.iter().all(|c| c.field != "rust_version"));
+        assert!(verification
+            .verified
+            .iter()
+            .all(|c| c.field != "rust_version"));
     }
 
     #[test]

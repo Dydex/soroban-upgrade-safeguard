@@ -202,8 +202,21 @@ pub struct FileConfig {
     #[serde(default, rename = "complexity_budget")]
     pub complexity_budget: Vec<crate::wasm_complexity::ComplexityBudgetEntryFile>,
 
+    #[serde(default, rename = "$schema")]
+    pub schema: Option<String>,
+    #[serde(default)]
+    pub policy: Option<crate::suppression::PolicyConfig>,
+    #[serde(default)]
+    pub require_reason: Option<crate::suppression::RequireReasonPolicy>,
+    #[serde(default)]
+    pub classification: Option<crate::classification::ClassificationConfig>,
+    #[serde(default, rename = "migration")]
+    pub migrations: Vec<crate::contract_migration::MigrationDeclaration>,
+    #[serde(default, rename = "budget")]
+    pub raw_budget: Vec<crate::budget::BudgetEntryFile>,
+
     /// Optional reproducible-build manifest path, relative to this config
-    /// file. See [`crate::build_manifest`] for the schema and validation
+    /// file. See [`crate::manifest`] for the schema and validation
     /// rules.
     #[serde(default)]
     pub build_manifest: Option<PathBuf>,
@@ -273,6 +286,18 @@ impl ResolvedConfig {
             // which TOML has no syntax for; strip it before parsing so it
             // doesn't surface as a confusing "unexpected character" error.
             let content = raw.strip_prefix('\u{feff}').unwrap_or(&raw);
+            if let Err(diags) = crate::config_schema::validate_safeguard_config(content, path) {
+                let formatted = diags
+                    .iter()
+                    .map(|d| d.to_string())
+                    .collect::<Vec<_>>()
+                    .join("\n");
+                anyhow::bail!(
+                    "Invalid configuration file '{}':\n{}",
+                    path.display(),
+                    formatted
+                );
+            }
             let parsed: FileConfig = toml::from_str(content)
                 .with_context(|| format!("Invalid suppression config file '{}'", path.display()))?;
             Some(parsed)
@@ -439,6 +464,21 @@ impl ResolvedConfig {
         if let Some(fc) = &file_config {
             suppressions.allow_targetless = fc.allow_targetless;
             suppressions.rules = fc.suppress.clone();
+            if let Some(policy) = &fc.policy {
+                suppressions.policy = policy.clone();
+            }
+            if let Some(req_reason) = &fc.require_reason {
+                suppressions.require_reason = req_reason.clone();
+            }
+            suppressions.migrations = fc.migrations.clone();
+            if !fc.raw_budget.is_empty() {
+                suppressions.budgets = crate::budget::BudgetConfig::from_file_entries(
+                    fc.raw_budget.clone(),
+                )
+                .map_err(|errors| {
+                    anyhow::anyhow!("Invalid [[budget]] configuration: {}", errors.join("; "))
+                })?;
+            }
         }
         suppressions.max_suppressions = resolved_profile.max_suppressions.value;
         if let Some(v) = env_bool("SAFEGUARD_ALLOW_TARGETLESS") {

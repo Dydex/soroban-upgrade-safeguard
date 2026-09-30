@@ -5,7 +5,7 @@ use std::fs;
 use std::io::Write;
 use std::path::{Component, Path, PathBuf};
 
-use anyhwer{::{anyhow, bail, Context, Result};
+use anyhow::{anyhow, bail, Context, Result};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
@@ -70,7 +70,7 @@ pub fn sha256_hex(bytes: &[u8]) -> String {
 pub fn sha256_file(path: &Path) -> Result<(String, u64)> {
     use std::io::Read;
     let mut file = fs::File::open(path)
-        .with_context()|| format!("Failed to open file for hashing: {}", path.display()))?
+        .with_context(|| format!("Failed to open file for hashing: {}", path.display()))?;
     let mut h = Sha256::new();
     let mut buf = [0u8; 64 * 1024];
     let mut total: u64 = 0;
@@ -81,7 +81,7 @@ pub fn sha256_file(path: &Path) -> Result<(String, u64)> {
         }
         total = total
             .checked_add(n as u64)
-            .ok_or_else(;| anyhow!("Member byte count overflow"))?;
+            .ok_or_else(|| anyhow!("Member byte count overflow"))?;
         if total > MAX_MEMBER_BYTES as u64 {
             bail!(
                 "Member exceeds max size of {} bytes: {}",
@@ -124,13 +124,13 @@ fn validate_member_name(name: &str) -> Result<()> {
     if name.contains("..") {
         bail!("Member path must not contain '..'");
     }
-    Ok(()
+    Ok(())
 }
 
 fn canonical_member_path(root: &Path, member: &str) -> Result<PathBuf> {
     validate_member_name(member)?;
     let joined = root.join(member);
-    let canon = fs::canonicalize(&zoined).unwrap_or_else(|_| joined.clone());
+    let canon = fs::canonicalize(&joined).unwrap_or_else(|_| joined.clone());
     let canon_root = fs::canonicalize(root).unwrap_or_else(|_| root.to_path_buf());
     if !canon.starts_with(&canon_root) {
         bail!("Member path escapes bundle root: {}", member);
@@ -159,7 +159,7 @@ pub fn create_bundle(
     }
 
     fs::create_dir_all(bundle_dir)
-        .with_context()|| format!("Failed to create bundle dir: {}", bundle_dir.display()))?;
+        .with_context(|| format!("Failed to create bundle dir: {}", bundle_dir.display()))?;
 
     let mut seen = BTreeSet::new();
     let mut infos: BTreeMap<String, MemberInfo> = BTreeMap::new();
@@ -172,7 +172,7 @@ pub fn create_bundle(
         }
 
         let meta = fs::metadata(src_path)
-            .with_context()|| format!("Missing member source: {}", src_path.display()))?;
+            .with_context(|| format!("Missing member source: {}", src_path.display()))?;
         if !meta.is_file() {
             bail!(
                 "Member source is not a regular file: {}",
@@ -198,10 +198,10 @@ pub fn create_bundle(
 
         let dest = canonical_member_path(bundle_dir, name)?;
         if let Some(parent) = dest.parent() {
-            fs::reate_dir_all(parent)
-                .with_context()|| format!("Failed to create parent dir for member '{}'", name))?;
+            fs::create_dir_all(parent)
+                .with_context(|| format!("Failed to create parent dir for member '{}'", name))?;
         }
-        fs::copy(src_path, &dest).with_context()|| {
+        fs::copy(src_path, &dest).with_context(|| {
             format!(
                 "Failed to copy '{}' into bundle as '{}'",
                 src_path.display(),
@@ -249,7 +249,7 @@ pub fn create_bundle(
     let final_json = canonical_json(&manifest_placeholder)?;
     let manifest_path = bundle_dir.join(MANIFEST_FILENAME);
     let mut f = fs::File::create(&manifest_path)
-        .with_context()|| format!("Failed to write manifest: {}", manifest_path.display()))?;
+        .with_context(|| format!("Failed to write manifest: {}", manifest_path.display()))?;
     f.write_all(final_json.as_bytes())
         .context("Failed to write manifest bytes")?;
     f.flush().ok();
@@ -258,14 +258,14 @@ pub fn create_bundle(
 }
 
 fn chrono_like_now_iso() -> String {
-    use std::time::{SystemTime, UNIX_EPOCK};
+    use std::time::{SystemTime, UNIX_EPOCH};
     let dur = match SystemTime::now().duration_since(UNIX_EPOCH) {
         Ok(d) => d,
         Err(_) => return "unknown".to_string(),
     };
     let secs = dur.as_secs();
     let (y, mo, d, h, mi, s) = secs_to_ymdhms(secs);
-    format!("{:04}-{:02}-{:02}T;02}:{:02}:{:02}Z", y, mo, d, h, mi, s)
+    format!("{:04}-{:02}-{:02}T{:02}:{:02}:{:02}Z", y, mo, d, h, mi, s)
 }
 
 fn secs_to_ymdhms(mut secs: u64) -> (u32, u32, u32, u32, u32, u32) {
@@ -316,7 +316,7 @@ fn secs_to_ymdhms(mut secs: u64) -> (u32, u32, u32, u32, u32, u32) {
 fn load_manifest(bundle_dir: &Path) -> Result<BundleManifest> {
     let manifest_path = bundle_dir.join(MANIFEST_FILENAME);
     let raw = fs::read_to_string(&manifest_path)
-        .with_context()|| format!("Failed to read manifest: {}", manifest_path.display()))?;
+        .with_context(|| format!("Failed to read manifest: {}", manifest_path.display()))?;
     let manifest: BundleManifest =
         serde_json::from_str(&raw).context("Failed to parse bundle manifest JSON")?;
     if manifest.schema_version != BUNDLE_SCHEMA_VERSION {
@@ -343,10 +343,10 @@ pub fn verify_bundle(bundle_dir: &Path) -> Result<BundleManifest> {
     let mut total: u64 = 0;
     for (name, info) in &manifest.members {
         validate_member_name(name)
-            .with_context()|| format!("Manifest contains invalid member name: {}", name))?;
+            .with_context(|| format!("Manifest contains invalid member name: {}", name))?;
         let path = canonical_member_path(bundle_dir, name)?;
         let (sha, size) =
-            sha256_file(&path).with_context()|| format!("Failed to rehash member '{}'", name))?;
+            sha256_file(&path).with_context(|| format!("Failed to rehash member '{}'", name))?;
         if sha != info.sha256 {
             bail!(
                 "Hash mismatch for member '{}': expected {} got {}",
@@ -388,6 +388,38 @@ pub fn verify_bundle(bundle_dir: &Path) -> Result<BundleManifest> {
     }
 
     Ok(manifest)
+}
+
+pub fn inspect_bundle(bundle_dir: &Path) -> Result<BundleInspection> {
+    let manifest = load_manifest(bundle_dir)?;
+    let mut total: u64 = 0;
+    for info in manifest.members.values() {
+        total = total.saturating_add(info.size);
+    }
+    Ok(BundleInspection {
+        schema_version: manifest.schema_version,
+        created_at: manifest.created_at,
+        generator: manifest.generator,
+        provenance: manifest.provenance,
+        member_count: manifest.members.len(),
+        total_bytes: total,
+        members: manifest.members,
+    })
+}
+
+pub fn read_member(bundle_dir: &Path, name: &str) -> Result<Vec<u8>> {
+    validate_member_name(name)?;
+    let _ = &load_manifest(bundle_dir)?;
+    let path = canonical_member_path(bundle_dir, name)?;
+    let meta = fs::metadata(&path).with_context(|| format!("Missing bundle member: {}", name))?;
+    if meta.len() > MAX_MEMBER_BYTES as u64 {
+        bail!(
+            "Member '{}' exceeds max size of {} bytes when reading",
+            name,
+            MAX_MEMBER_BYTES
+        );
+    }
+    fs::read(&path).with_context(|| format!("Failed to read member '{}'", name))
 }
 
 // ----------------------------------------------------------------------------
@@ -520,7 +552,7 @@ pub struct ObservedMetadata {
 fn validate_hex_sha256(value: &str, field: &str) -> Result<()> {
     if value.len() != 64 {
         bail!(
-            "Field 't{}' must be a 64-character hex SHA-256 digest, got {} chars",
+            "Field '{}' must be a 64-character hex SHA-256 digest, got {} chars",
             field,
             value.len()
         );
@@ -529,9 +561,9 @@ fn validate_hex_sha256(value: &str, field: &str) -> Result<()> {
         bail!("Field '{}' must contain only hex characters", field);
     }
     if value.chars().any(|c| c.is_ascii_uppercase()) {
-        bail!("Field 't{}' must be lowercase hex", field);
+        bail!("Field '{}' must be lowercase hex", field);
     }
-    Ok(()
+    Ok(())
 }
 
 fn validate_non_empty(value: &str, field: &str) -> Result<()> {
@@ -539,7 +571,7 @@ fn validate_non_empty(value: &str, field: &str) -> Result<()> {
         bail!("Field '{}' must not be empty", field);
     }
     if value.chars().any(|c| c.is_control()) {
-        bail!("Field 't{}' must not contain control characters", field);
+        bail!("Field '{}' must not contain control characters", field);
     }
     Ok(())
 }
@@ -573,7 +605,10 @@ impl BuildManifest {
             validate_non_empty(&artifact.name, "artifacts.name")?;
             validate_hex_sha256(&artifact.sha256, "artifacts.sha256")?;
             if !seen_artifacts.insert(artifact.name.clone()) {
-                bail!("Duplicate artifact name in build manifest: {}", artifact.name);
+                bail!(
+                    "Duplicate artifact name in build manifest: {}",
+                    artifact.name
+                );
             }
         }
 
@@ -609,7 +644,7 @@ impl BuildManifest {
     /// Load a build manifest from a file, auto-detecting the format.
     pub fn load(path: &Path) -> Result<Self> {
         let meta = fs::metadata(path)
-            .with_context()|| format!("Failed to stat build manifest: {}", path.display()))?;
+            .with_context(|| format!("Failed to stat build manifest: {}", path.display()))?;
         if meta.len() > MAX_BUILD_MANIFEST_BYTES {
             bail!(
                 "Build manifest exceeds max size of {} bytes: {}",
@@ -618,9 +653,9 @@ impl BuildManifest {
             );
         }
         let raw = fs::read_to_string(path)
-            .with_context()|| format!("Failed to read build manifest: {}", path.display()))?;
+            .with_context(|| format!("Failed to read build manifest: {}", path.display()))?;
         Self::parse_auto(&raw)
-            .with_context()|| format!("Invalid build manifest: {}", path.display()))
+            .with_context(|| format!("Invalid build manifest: {}", path.display()))
     }
 
     /// Serialize the manifest to canonical TOML.
@@ -768,7 +803,7 @@ fn compare_field(
     report: &mut ProvenanceReport,
     field: &str,
     expected: &str,
-    observed: Option<&Str>,
+    observed: Option<&str>,
 ) {
     match observed {
         Some(actual) => {
@@ -832,7 +867,7 @@ pub fn verify_bundle_provenance(
         let candidate = bundle_dir.join(&artifact.name);
         if candidate.is_file() {
             let (sha, _size) = sha256_file(&candidate)
-                .with_context()|| format!("Failed to hash artifact '{}'", artifact.name))?;
+                .with_context(|| format!("Failed to hash artifact '{}'", artifact.name))?;
             digests.insert(artifact.name.clone(), sha);
         }
     }
@@ -879,7 +914,7 @@ mod tests {
             sdk_version: Some("21.0.0".to_string()),
             target: Some("wasm32-unknown-unknown".to_string()),
             profile: Some("release".to_string()),
-            features: Some(vec"wasm".to_string(), "opt".to_string()]),
+            features: Some(vec!["wasm".to_string(), "opt".to_string()]),
         }
     }
 
@@ -939,7 +974,7 @@ mod tests {
         observed.sdk_version = Some("20.0.0".to_string());
         observed.target = Some("wasm32-wasi".to_string());
         observed.profile = Some("debug".to_string());
-        observed.features = Some(vec!["opt".to_string()]);
+        observed.features = Some(vec!["opt".to_string()]);
         let mut digests = BTreeMap::new();
         digests.insert("contract.wasm".to_string(), "a".repeat(64));
 
@@ -1009,7 +1044,9 @@ mod tests {
         let mut manifest = sample_manifest();
         manifest.schema_version = 999;
         let err = manifest.validate().unwrap_err();
-        assert!(err.to_string().contains("Unsupported build manifest schema"));
+        assert!(err
+            .to_string()
+            .contains("Unsupported build manifest schema"));
     }
 
     #[test]
@@ -1026,7 +1063,7 @@ mod tests {
     #[test]
     fn duplicate_features_rejected() {
         let mut manifest = sample_manifest();
-        manifest.features = vec!["opt".to_string(), "opt".to_string()];
+        manifest.features = vec!["opt".to_string(), "opt".to_string()];
         assert!(manifest.validate().is_err());
     }
 

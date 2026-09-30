@@ -9,7 +9,7 @@
 #![cfg(unix)]
 
 use std::os::unix::fs::symlink;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::process::Command;
 
 fn temp_dir(name: &str) -> PathBuf {
@@ -413,6 +413,7 @@ fn redact_paths_in_text_output_also_redacts_symlinks() {
         wasm("v1.wasm").to_str().unwrap(),
         link.to_str().unwrap(),
         "--redact-paths",
+        "--quiet",
         "--format",
         "text",
     ]);

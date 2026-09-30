@@ -22,6 +22,7 @@
 | Check whether a single contract spec is structurally well-formed | [`lint`](#lint) |
 | Verify RPC connectivity and the JSON-RPC response format | [`preflight`](#preflight) |
 | List every finding category with severity, trigger, and remediation | [`categories`](#categories) |
+| Output JSON Schema for reports, configuration, batch manifests, or editor completion | [`print-schema`](#print-schema) |
 | Compare all contracts in two directories at once | `--old-dir` / `--new-dir` (no subcommand) |
 | Compare many named contract pairs in one run | `--manifest` (no subcommand) |
 | Re-run the comparison automatically whenever a WASM file changes | Add `--watch` to any comparison run |
@@ -145,3 +146,34 @@ soroban-upgrade-safeguard categories --format json
 ```
 
 See [Finding Category Reference](finding-categories.md) for the full documented taxonomy.
+
+### `print-schema`
+
+Prints machine-readable JSON Schemas (Draft-07), editor completion catalogs, or reference documentation directly from the running binary. Used for IDE integrations (YAML/TOML/JSON schema associations), editor hover/completion, or verifying configuration and report contracts.
+
+- **Report schema (default)**: Describes the `--format json` output document.
+- **Config schema (`--config`)**: Describes `.safeguard.toml` and CLI `--config` files.
+- **Manifest schema (`--manifest`)**: Describes batch manifests used with `--manifest`.
+- **Editor completion (`--completion`)**: Generates autocomplete suggestions and hover documentation.
+- **Markdown documentation (`--markdown`)**: Emits formatted Markdown reference tables.
+- **Compact output (`--compact`)**: Outputs minified single-line JSON.
+
+```bash
+# Print report schema
+soroban-upgrade-safeguard print-schema
+
+# Print configuration file schema
+soroban-upgrade-safeguard print-schema --config
+
+# Print batch manifest schema
+soroban-upgrade-safeguard print-schema --manifest
+
+# Generate editor completion catalog for configuration
+soroban-upgrade-safeguard print-schema --config --completion
+
+# Generate markdown documentation for configuration
+soroban-upgrade-safeguard print-schema --config --markdown
+```
+
+See [Configuration Schema & Compatibility](config_schema_compatibility.md) and [Report Schema Compatibility](report_schema_compatibility.md).
+

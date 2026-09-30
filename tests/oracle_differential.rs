@@ -851,8 +851,8 @@ fn oracle_full_corpus_fixture_clean() {
 
     let report = compare_spec_with_seed(&spec, "corpus_token_v1");
     assert_oracle_clean(&report);
-    // 2 struct fields + 3 union payload types + 3 fn params + 1 fn return = 9
-    assert_eq!(report.comparisons, 9);
+    // 2 struct fields + 5 union payload types + 3 fn params + 1 fn return = 11
+    assert_eq!(report.comparisons, 11);
 }
 
 // ---------------------------------------------------------------------------

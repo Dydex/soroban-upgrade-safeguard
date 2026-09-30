@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
-use std::io::Read;
 use std::collections::BTreeMap;
+use std::io::Read;
 use std::path::{Path, PathBuf};
 
 use ring::digest::{digest, SHA256};
@@ -14,7 +14,7 @@ use stellar_xdr::curr::{
 use wasmparser::Parser;
 
 use crate::error::Error;
-use crate::manifest::{BuildManifest, ManifestFormat, ManifestMismatch, ManifestVerification};
+use crate::manifest::{BuildManifest, ManifestFormat, ManifestMismatch};
 use crate::oci::{self, OciArtifact, OciArtifactKind, OciFetchConfig, OciReference};
 use crate::remote::{self, FetchedArtifact, RemoteFetchConfig, RemoteRef};
 use crate::rpc::RpcClientConfig;
@@ -81,6 +81,16 @@ impl ManifestCheckResult {
     pub fn is_clean(&self) -> bool {
         self.mismatches.is_empty()
     }
+}
+
+/// A verified build manifest paired with the result of checking the module
+/// against it, for inclusion in reports.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ManifestVerification {
+    /// The manifest that was verified against.
+    pub manifest: BuildManifest,
+    /// The outcome of the per-field comparison.
+    pub result: ManifestCheckResult,
 }
 
 /// Extract embedded contract environment metadata from a WASM module's
@@ -188,10 +198,7 @@ pub fn verify_against_manifest(
             }
         }
         None => {
-            unverified.insert(
-                "artifact_sha256".to_string(),
-                module.sha256.clone(),
-            );
+            unverified.insert("artifact_sha256".to_string(), module.sha256.clone());
         }
     }
 
@@ -236,7 +243,12 @@ pub fn verify_against_manifest(
         &mut mismatches,
     );
 
-    match (&manifest.features, &embedded.features) {
+    let expected_features = if manifest.features.is_empty() {
+        None
+    } else {
+        Some(&manifest.features)
+    };
+    match (expected_features, &embedded.features) {
         (Some(expected), Some(actual)) => {
             let mut a = expected.clone();
             let mut b = actual.clone();
@@ -313,7 +325,9 @@ pub fn load_build_manifest(path: &Path) -> Result<BuildManifest, Error> {
         Some("json") => ManifestFormat::Json,
         _ => ManifestFormat::Toml,
     };
-    BuildManifest::parse(&contents, format)
+    BuildManifest::parse_with_format(&contents, format).map_err(|e| Error::InvalidInput {
+        details: e.to_string(),
+    })
 }
 
 /// Load a build manifest from raw bytes, using the given format.
@@ -324,7 +338,9 @@ pub fn load_build_manifest_from_bytes(
     let contents = std::str::from_utf8(bytes).map_err(|e| Error::InvalidInput {
         details: format!("Build manifest is not valid UTF-8: {}", e),
     })?;
-    BuildManifest::parse(contents, format)
+    BuildManifest::parse_with_format(contents, format).map_err(|e| Error::InvalidInput {
+        details: e.to_string(),
+    })
 }
 
 /// Verify a WASM module against a manifest and return both the check result
@@ -1013,17 +1029,18 @@ fn fetch_wasm_from_code_hash_inner(
         hash: Hash(requested_hash),
     });
 
-    let code_key_b64 = code_ledger_key
-        .to_xdr_base64(Limits::none())
-        .map_err(|e| Error::XdrDecoding {
-            entry_index: None,
-            byte_offset: None,
-            details: format!(
-                "Failed to serialize ContractCode LedgerKey to base64: {}",
-                e
-            ),
-            source: Some(Box::new(e)),
-        })?;
+    let code_key_b64 =
+        code_ledger_key
+            .to_xdr_base64(Limits::none())
+            .map_err(|e| Error::XdrDecoding {
+                entry_index: None,
+                byte_offset: None,
+                details: format!(
+                    "Failed to serialize ContractCode LedgerKey to base64: {}",
+                    e
+                ),
+                source: Some(Box::new(e)),
+            })?;
 
     let code_response = query_rpc(
         rpc_url,
@@ -1039,15 +1056,17 @@ fn fetch_wasm_from_code_hash_inner(
         .ok_or_else(|| Error::RpcProtocol {
             rpc_url: crate::rpc::redact_url(rpc_url),
             code: 0,
-            message: "RPC response for contract code did not contain 'entries' array"
-                .to_string(),
+            message: "RPC response for contract code did not contain 'entries' array".to_string(),
         })?;
 
     if code_entries.is_empty() {
         return Err(Error::RpcProtocol {
             rpc_url: crate::rpc::redact_url(rpc_url),
             code: 0,
-            message: format!("WASM code not found on-chain for hash {}", requested_hash_hex),
+            message: format!(
+                "WASM code not found on-chain for hash {}",
+                requested_hash_hex
+            ),
         });
     }
 

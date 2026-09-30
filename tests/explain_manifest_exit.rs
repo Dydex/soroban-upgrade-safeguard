@@ -72,7 +72,7 @@ name = "test_pair"
 "#
     .to_string();
 
-    let manifest = write_file(&dir, "manifest.toml", manifest_content);
+    let manifest = write_file(&dir, "manifest.toml", &manifest_content);
     let run = run_manifest(&manifest, &["--explain-manifest"]);
 
     assert_eq!(

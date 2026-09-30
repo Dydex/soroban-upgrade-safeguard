@@ -1,1 +1,504 @@
-Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IE1JVAoKLy8vICMgU29yb2JhbiBVcGdyYWRlIFNhZmVndWFyZAovLy8KLy8vIExpYnJhcnkgZm9yIGFuYWx5emluZyBhbmQgdmFsaWRhdGluZyBTb3JvYmFuIHNtYXJ0LWNvbnRyYWN0IHVwZ3JhZGVzIG9uIHRoZQovLy8gU3RlbGxhciBuZXR3b3JrLiBJdCBkZXRlY3RzIGJyZWFraW5nIGNoYW5nZXMgaW4gc3RvcmFnZSBsYXlvdXQsIGZ1bmN0aW9uCi8vLyBzaWduYXR1cmVzLCBhbmQgZXZlbnQgc2NoZW1hcyBiZWZvcmUgYW4gdXBncmFkZSBpcyBkZXBsb3llZC4KLy8vCi8vLyBBIGJyZWFraW5nIGNoYW5nZSBoYXMgdHdvIGluZGVwZW5kZW50IGF4ZXMgaW4gdGhlIG91dHB1dDogd2hldGhlciBhIGh1bWFuCi8vLyAqYWNrbm93bGVkZ2VkKiBpdCAoW2BzdXBwcmVzc2lvbmBdKSBhbmQgd2hldGhlciBhIG1pZ3JhdGlvbiAqaGFuZGxzKiBpdAovLy8gKFtgY29udHJhY3RfbWlncmF0aW9uYF0pLiBUaGV5IGFyZSByZXBvcnRlZCBzZXBhcmF0ZWx5IGFuZCBuZXZlciBjb2xsYXBzZQovLy8gaW50byBvbmUgYW5vdGhlci4KCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIGF0dGVzdGF0aW9uOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGF0dGVzdGF0aW9uOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgYnVkZ2V0OwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGJ1ZGdldDsKcHViIG1vZCBidW5kbGU7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIGJ1aWxkX21hbmlmZXN0OwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGJ1aWxkX21hbmlmZXN0OwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGJ1bmRsZTsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIGNhbGxfYWJpOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGNhbGxfYWJpOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgY2FwYWJpbGl0eTsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCBjYXBhYmlsaXR5OwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgY2F0ZWdvcnk7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QgY2F0ZWdvcnk7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBjb2xvcjsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCBjb2xvcjsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIGNvbmZpZzsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCBjb25maWc7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBkZWNvZGVyX3JlZ2lzdHJ5OwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGRlY29kZXJfcmVnaXN0cnk7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBkZXBlbmRlbmN5OwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGRlcGVuZGVuY3k7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBkaWZmOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGRpZmY7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBlbXBpcmljYWw7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QgZW1waXJpY2FsOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgZXJyb3I7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QgZXJyb3I7CgpwdWIgbW9kIGludGVyZmFjZV9oYXNoOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QganNvbmw7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QganNvbmw7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBsb2FkZXI7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QgbG9hZGVyOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgbGltaXRzOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGxpbWl0czsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBsaW50OwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGxpbnQ7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBtYW5pZmVzdDsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCBtYW5pZmVzdDsKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgbWV0YWRhdGFfY2FjaGU7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QgbWV0YWRhdGFfY2FjaGU7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBtYXBwZXI7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QgbWFwcGVyOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgY29udHJhY3RfbWlncmF0aW9uOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIGNvbnRyYWN0X21pZ3JhdGlvbjsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIG1ldGFkYXRhX2NhY2hlOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIG1ldGFkYXRhX2NhY2hlOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgbWlncmF0aW9uOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIG1pZ3JhdGlvbjsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIG9jaTsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCBvY2k7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIG9yYWNsZTsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCBvcmFjbGU7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBvcmFjbGU7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2Qgb3JhY2xlOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgcGFyc2VyOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIHBhcnNlcjsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIHByZWZsaWdodDsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCBwcmVmbGlnaHQ7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBwcm9maWxlOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIHByb2ZpbGU7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCByZWRhY3Q7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QgcmVkYWN0OwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgcmVtb3RlOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIHJlbW90ZTsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIHJlbmRlcjsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCByZW5kZXI7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCByZXBvcnQ7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QgcmVwb3J0OwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgcmVwb3J0X3NjaGVtYTsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCByZXBvcnRfc2NoZW1hOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgcnBjOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIHJwYzsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIHJwY19idW5kbGU7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QgcnBjX2J1bmRsZTsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIHJwY19yZWNvcmQ7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2QgcnBjX3JlY29yZDsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIHJ1bnRpbWVfc3VyZmFjZTsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCBydW50aW1lX3N1cmZhY2U7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBzcGVjOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIHNwZWM7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBzcGVjX2pzb247CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2Qgc3BlY19qc29uOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2Qgc3RvcmFnZV9pbmZlcmVuY2U7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2Qgc3RvcmFnZV9pbmZlcmVuY2U7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCBzdG9yYWdlX3NjaGVtYTsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCBzdG9yYWdlX3NjaGVtYTsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIHN1cHByZXNzaW9uOwojW2NmZyhub3QoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpKV0KbW9kIHN1cHByZXNzaW9uOwoKI1tpZihmZWF0dXJlID0gInVuc3RhYmxlIildCnB1YiBtb2QgbGluZWFnZTsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCnB1YiBtb2QgbGluZWFnZTsKCiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQpwdWIgbW9kIHdhdGNoX3N0YXR1czsKI1tjZmcobm90KGZlYXR1cmUgPSAidW5zdGFibGUiKSldCm1vZCB3YXRjaF9zdGF0dXM7CgojW2lmKGZlYXR1cmUgPSAidW5zdGFibGUiKV0KcHViIG1vZCB3YXNtX2NvbXBsZXhpdHk7CiNbaWYoZmVhdHVyZSA9ICJ1bnN0YWJsZSIpXQptb2Qgd2FzbV9jb21wbGV4aXR5OwoKLy8gU3RhYmxlIHB1YmxpYyBBUEkgZXhwb3J0cyBhdCB0aGUgcm9vdApwdWIgdXNlIGNyYXRlOjphdHRlc3RhdGlvbjo6ewogICAgc2lnbl9zdGF0ZW1lbnQsIHZlcmlmeV9hcnRpZmFjdHMsIHZlcmlmeV9zaWduYXR1cmVzLCBBcnRpZmFjdERpZ2VzdCwgQXR0ZXN0YXRpb25TaWduZXIsCiAgICBEc3NlRW52ZWxvcGUsIEVkMjU1MTlTaWduZXIsIEluVG90b1N0YXRlbWVudFYxLCBTYWZlZ3VhcmRQcmVkaWNhdGVWMSwgU2lnbmF0dXJlVmVyaWZpY2F0aW9uLAogICAgVmVyaWZpY2F0aW9uRmFpbHVyZSwgVmVyaWZpY2F0aW9uRmFpbHVyZUtpbmQsIFZlcmlmaWNhdGlvblBvbGljeSwKfTsKcHViIHVzZSBjcmF0ZTo6YnVpbGRfbWFuaWZlc3Q6OnsKICAgIEJ1aWxkTWFuaWZlc3QsIEJ1aWxkTWFuaWZlc3RDb21wYXJpc29uLCBCdWlsZE1hbmlmZXN0Rm9ybWF0LCBCdWlsZE1hbmlmZXN0VmFsaWRhdGlvbkVycm9yLAogICAgTWFuaWZlc3RGaWVsZFN0YXR1cywgTWFuaWZlc3RQcm92ZW5hbmNlRmluZGluZywgTWFuaWZlc3RQcm92ZW5hbmNlUmVwb3J0LAp9OwpwdWIgdXNlIGNyYXRlOjpjYWxsX2FiaTo6ewogICAgQ2FsbEFiaUJyZWFrLCBDYWxsQWJpQ29tcGF0aWJpbGl0eSwgQ2FsbERpcmVjdGlvbiwgRGlyZWN0aW9uYWxDYWxsVmVyZGljdCwKfTsKcHViIHVzZSBjcmF0ZTo6ZGlmZjo6e0ZpbmRpbmcsIFNldmVyaXR5fTsKcHViIHVzZSBjcmF0ZTo6bGluZWFnZTo6ewogICAgdmFsaWRhdGVfY2FuZGlkYXRlX2FnYWluc3RfbGluZWFnZSwgSGlzdG9yaWNhbEZpbmRpbmcsIExpbmVhZ2VSZWNvcmQsIExpbmVhZ2VTdG9yZSwKICAgIExpbmVhZ2VWYWxpZGF0aW9uUmVwb3J0LCBMaXZlU3RhdHVzLCBMaXZlVmVyc2lvblBvbGljeSwKfTsKcHViIHVzZSBjcmF0ZTo6b2NpOjp7CiAgICBPY2lBcnRpZmFjdCwgT2NpQXJ0aWZhY3RLaW5kLCBPY2lGZXRjaENvbmZpZywgT2NpUmVmZXJlbmNlLCBPY2lTZWxlY3RvciwKICAgIE1FRElBX1RZUEVfRVhUUkFDVEVEX1NQRUMsIE1FRElBX1RZUEVfV0FTTSwKfTsKcHViIHVzZSBjcmF0ZTo6cmVtb3RlOjp7CiAgICBkZWZhdWx0X2NhY2hlX2RpciwgZmV0Y2hfdmVyaWZpZWQsIENhY2hlU3RhdHVzLCBGZXRjaGVkQXJ0aWZhY3QsIFJlbW90ZUZldGNoQ29uZmlnLCBSZW1vdGVSZWYsCn07CnB1YiB1c2UgY3JhdGU6OnJlcG9ydDo6e1JlcG9ydGVkRmluZGluZywgU2FmZXR5UmVwb3J0fTsKcHViIHVzZSBjcmF0ZTo6cnVudGltZV9zdXJmYWNlOjp7CiAgICBEYXRhU2VnbWVudFN1bW1hcnksIEVsZW1lbnRTZWdtZW50U3VtbWFyeSwgR2xvYmFsRGVjbGFyYXRpb24sIE1lbW9yeURlY2xhcmF0aW9uLAogICAgUnVudGltZVN1cmZhY2UsIFRhYmxlRGVjbGFyYXRpb24sCn07CnB1YiB1c2UgY3JhdGU6OnNwZWNfanNvbjo6e0ludGVyZmFjZUxvY2tmaWxlLCBJTlRFUkZBQ0VfTE9DS0ZJTEVfU0NIRU1BX1ZFUlNJT059OwpwdWIgdXNlIGNyYXRlOjpzdG9yYWdlX3NjaGVtYTo6ewogICAgU2NoZW1hRm9ybWF0LCBTdG9yYWdlUmVjb25jaWxpYXRpb24sIFN0b3JhZ2VTY2hlbWEsIFN0b3JhZ2VTY2hlbWFDb21wYXJpc29uLAp9OwoKdXNlIHN0ZDo6cGF0aDo6UGF0aDsKCnVzZSBhbnlod2Vyezo6e0NvbnRleHQsIFJlc3VsdH07Cgp1c2UgY3JhdGU6OnNwZWM6OkNvbnRyYWN0U3BlYzsKdXNlIGNyYXRlOjpzdXBwcmVzc2lvbjo6U3VwcHJlc3Npb25Db25maWc7CgovLy8gSW5mZXIgYW5kIHJlY29uY2lsZSBzdG9yYWdlIHVzZSBmb3IgYSBzaW5nbGUgY29tcGlsZWQgY29udHJhY3QuCnB1YiBmbiBhbmFseXplX3dhc21fc3RvcmFnZV9zY2hlbWEoCiAgICB3YXNtOiAmW3U4XSwKICAgIHNjaGVtYTogJlN0b3JhZ2VTY2hlbWEsCikgLT4gUmVzdWx0PFN0b3JhZ2VSZWNvbmNpbGlhdGlvbj4gewogICAgbGV0IG1ldGFkYXRhID0KICAgICAgICBwYXJzZXI6OmV4dHJhY3RfbWV0YWRhdGEod2FzbSkuY29udGV4dCgiRmFpbGVkIHRvIGFuYWx5emUgc3RvcmFnZSB1c2UgaW4gV0FTTSIpPzsKICAgIE9rKHNjaGVtYS5yZWNvbmNpbGUoJm1ldGFkYXRhLnN0b3JhZ2UpKQp9CgovLy8gSW5mZXIgYW5kIHJlY29uY2lsZSBzdG9yYWdlIHVzZSBmb3IgYm90aCBzaWRlcyBvZiBhbiB1cGdyYWRlLgpwdWIgZm4gY29tcGFyZV93YXNtX3N0b3JhZ2Vfc2NoZW1hcygKICAgIG9sZF93YXNtOiAmW3U4XSwKICAgIG9sZF9zY2hlbWE6ICZTdG9yYWdlU2NoZW1hLAogICAgbmV3X3dhc206ICZbdThdLAogICAgbmV3X3NjaGVtYTogJlN0b3JhZ2VTY2hlbWEsCikgLT4gUmVzdWx0PFN0b3JhZ2VTY2hlbWFDb21wYXJpc29uPiB7CiAgICBsZXQgb2xkID0gcGFyc2VyOjpleHRyYWN0X21ldGFkYXRhKG9sZF93YXNtKQogICAgICAgIC5jb250ZXh0KCJGYWlsZWQgdG8gYW5hbHl6ZSBzdG9yYWdlIHVzZSBpbiB0aGUgb2xkIFdBU00iKT87CiAgICBsZXQgbmV3ID0gcGFyc2VyOjpleHRyYWN0X21ldGFkYXRhKG5ld193YXNtKQogICAgICAgIC5jb250ZXh0KCJGYWlsZWQgdG8gYW5hbHl6ZSBzdG9yYWdlIHVzZSBpbiB0aGUgbmV3IFdBU00iKT87CiAgICBPayhzdG9yYWdlX3NjaGVtYTo6Y29tcGFyZV9zdG9yYWdlX3NjaGVtYXMoCiAgICAgICAgb2xkX3NjaGVtYSwKICAgICAgICAmb2xkLnN0b3JhZ2UsCiAgICAgICAgbmV3X3NjaGVtYSwKICAgICAgICAmbмV3LnN0b3JhZ2UsCiAgICApKQp9CgovLy8gQ29tcGFyZSB0d28gU29yb2JhbiBjb250cmFjdCBidWlsZHMgc3VwcGxpZWQgYXMgcmF3IFdBU00gYnl0ZSBzbGljZXMuCnB1YiBmbiBjb21wYXJlX3dhc21fYnl0ZXMob2xkX3dhc206ICZbdThdLCBuZXdfd2FzbTogJlt1OF0pIC0+IFJlc3VsdDxTYWZldHlSZXBvcnQ+IHsKICAgIGxldCBvbGRfbWV0YSA9IHBhcnNlcjo6ZXh0cmFjdF9tZXRhZGF0YShvbGRfd2FzbSkKICAgICAgICAuY29udGV4dCgiRmFpbGVkIHRvIGV4dHJhY3QgbWV0YWRhdGEgZnJvbSB0aGUgb2xkIFdBU00iKT87CiAgICBsZXQgbmV3X21ldGEgPSBwYXJzZXI6OmV4dHJhY3RfbWV0YWRhdGEobmV3X3dhc20pCiAgICAgICAgLmNvbnRleHQoIkZhaWxlZCB0byBleHRyYWN0IG1ldGFkYXRhIGZyb20gdGhlIG5ldyBXQVNNIik/OwoKICAgIGxldCBvbGRfc3BlYyA9IENvbnRyYWN0U3BlYzo6ZnJvbV9lbnRyaWVzKCZvbGRfbWV0YS5zcGVjKTsKICAgIGxldCBuZXdfc3BlYyA9IENvbnRyYWN0U3BlYzo6ZnJvbV9lbnRyaWVzKCZuZXdfbWV0YS5zcGVjKTsKCiAgICBsZXQgbXV0IGRpZmZfcmVwb3J0ID0gZGlmZjo6Y29tcGFyZSgmb2xkX3NwZWMsICZuZXdfc3BlYyk7CiAgICBkaWZmOjpjb21wYXJlX3J1bnRpbWVfc3VyZmFjZXMoCiAgICAgICAgJm9sZF9tZXRhLnJ1bnRpbWVfc3VyZmFjZSwKICAgICAgICAmbмV3X21ldGEucnVudGltZV9zdXJmYWNlLAogICAgICAgICZtdXQgZGlmZl9yZXBvcnQsCiAgICApOwoKICAgIE9rKAogICAgICAgIFNhZmV0eVJlcG9ydDo6bmV3X3dpdGhfc3BlY3MoJmRpZmZfcmVwb3J0LCAmb2xkX3NwZWMsICZuZXdfc3BlYykKICAgICAgICAgICAgLndpdGhfaW50ZXJmYWNlX2hhc2hlcyhvbGRfc3BlYy5pbnRlcmZhY2VfaGFzaCgpLCBuZXdfc3BlYy5pbnRlcmZhY2VfaGFzaCgpKSwKICAgICkKfQoKLy8vIENvbXBhcmUgdHdvIFNvcm9iYW4gY29udHJhY3QgYnVpbGRzIHJlYWQgZnJvbSBXQVNNIGZpbGVzIG9uIGRpc2suCnB1YiBmbiBjb21wYXJlX3dhc21fZmlsZXMob2xkX3BhdGg6ICZQYXRoLCBuZXdfcGF0aDogJlBhdGgpIC0+IFJlc3VsdDxTYWZldHlSZXBvcnQ+IHsKICAgIGxldCBvbGQgPSBsb2FkZXI6OmxvYWRfd2FzbShvbGRfcGF0aCkubWFwX2Vycih8ZXwgYW55aG93Ojphbnlob3chKCJ7fSIsIGUpKT87CiAgICBsZXQgbmV3ID0gbG9hZGVyOjpsb2FkX3dhc20obmV3X3BhdGgpLm1hcF9lcnIofGV8IGFueWhvdzo6YW55aG93ISgie30iLCBlKSk/OwogICAgY29tcGFyZV93YXNtX2J5dGVzKCZvbGQuYnl0ZXMsICZuZXcuYnl0ZXMpCn0KCi8vLyBPcHRpb25zIGZvciB0aGUgYW5hbHlzaXMgcGlwZWxpbmUuCiNbZGVyaXZlKERlZmF1bHQpXQpwdWIgc3RydWN0IENvbXBhcmVPcHRpb25zPCdhPiB7CiAgICBwdWIgc3VwcHJlc3Npb25zOiBPcHRpb248JidhIFN1cHByZXNzaW9uQ29uZmlnPiwKICAgIHB1YiBleHBsYWluOiBib29sLAogICAgcHViIHN0cmljdDogYm9vbCwKICAgIHB1YiBzdG9yYWdlX3NjaGVtYXM6IE9wdGlvbjwoJidhIFN0b3JhZ2VTY2hlbWEsICcmYSBTdG9yYWdlU2NoZW1hKT4sCiAgICBwdWIgbGluZWFnZV9zdG9yZTogT3B0aW9uPCcmYSBsaW5lYWdlOjpMaW5lYWdlU3RvcmU+LAogICAgLy8vIFRoZSBjb250cmFjdCdzIG5hbWUsIHVzZWQgdG8gc2NvcGUgbWlncmF0aW9ucyBkZWNsYXJlZCB3aXRoCiAgICAvLy8gYGNvbnRyYWN0cyA9IFsuLl1gIGluIGEgYC5zYWZlZ3VhcmQudG9tbGAgc2hhcmVkIGFjcm9zcyBzZXZlcmFsCiAgICAvLy8gY29udHJhY3RzLiBgTm9uZWAgbWF0Y2hlcyBvbmx5IG1pZ3JhdGlvbnMgd2l0aCBubyBgY29udHJhY3RzYCBrZXkuCiAgICBwdWIgY29udHJhY3Q6IE9wdGlvbjwmJ2Egc3RyPiwKICAgIC8vLyBDb21wbGV4aXR5IGJ1ZGdldHMgZm9yIHRoZSBXQVNNIGNvZGUgc2VjdGlvbi4gV2hlbiBub24tZW1wdHkgdGhlCiAgICAvLy8gcHJvZmlsZXIgaXMgaW52b2tlZCBhbmQgZXhjZWVkZWQgZW50cmllcyBnYXRlIGBpc19zYWZlYC4KICAgIHB1YiBjb21wbGV4aXR5X2J1ZGdldDogT3B0aW9uPCcmYSBjcmF0ZTo6d2FzbV9jb21wbGV4aXR5OjpDb21wbGV4aXR5QnVkZ2V0Q29uZmlnPiwKICAgIC8vLyBPcHRpb25hbCByZXByb2R1Y2libGUtYnVpbGQgbWFuaWZlc3QgY29tcGFyZWQgYWdhaW5zdCBlbWJlZGRlZAogICAgLy8vIGNvbnRyYWN0IG1ldGFkYXRhIGFuZCBhY3R1YWwgYXJ0aWZhY3QgaGFzaGVzLgogICAgcHViIGJ1aWxkX21hbmlmZXN0OiBPcHRpb248JidhIEJ1aWxkTWFuaWZlc3Q+LAp9CgovLy8gQ29tcGFyZSB0d28gU29yb2JhbiBjb250cmFjdCBidWlsZHMgc3VwcGxpZWQgYXMgcmF3IFdBU00gYnl0ZSBzbGljZXMgd2l0aCBvcHRpb25zLgpwdWIgZm4gY29tcGFyZV93YXNtX2J5dGVzX3dpdGhfb3B0aW9ucygKICAgIG9sZF93YXNtOiAmW3U4XSwKICAgIG5ld193YXNtOiAmW3U4XSwKICAgIG9wdGlvbnM6ICZDb21wYXJlT3B0aW9uczwnXz4sCikgLT4gUmVzdWx0PFNhZmV0eVJlcG9ydD4gewogICAgbGV0IGVtcHR5X3N1cHByZXNzaW9ucyA9IFN1cHByZXNzaW9uQ29uZmlnOjpkZWZhdWx0KCk7CiAgICBsZXQgc3VwcHJlc3Npb25zID0gb3B0aW9ucy5zdXBwcmVzc2lvbnMudW53cmFwX29yKCZlbXB0eV9zdXBwcmVzc2lvbnMpOwoKICAgIGxldCBvbGRfbWV0YSA9IHBhcnNlcjo6ZXh0cmFjdF9tZXRhZGF0YShvbGRfd2FzbSkKICAgICAgICAuY29udGV4dCgiRmFpbGVkIHRvIGV4dHJhY3QgbWV0YWRhdGEgZnJvbSB0aGUgb2xkIFdBU00iKT87CiAgICBsZXQgbmV3X21ldGEgPSBwYXJzZXI6OmV4dHJhY3RfbWV0YWRhdGEobmV3X3dhc20pCiAgICAgICAgLmNvbnRleHQoIkZhaWxlZCB0byBleHRyYWN0IG1ldGFkYXRhIGZyb20gdGhlIG5ldyBXQVNNIik/OwoKICAgIGxldCBvbGRfc3BlYyA9IENvbnRyYWN0U3BlYzo6ZnJvbV9lbnRyaWVzKCZvbGRfbWV0YS5zcGVjKTsKICAgIGxldCBuZXdfc3BlYyA9IENvbnRyYWN0U3BlYzo6ZnJvbV9lbnRyaWVzKCZuZXdfbWV0YS5zcGVjKTsKCiAgICBsZXQgbXV0IGRpZmZfcmVwb3J0ID0gZGlmZjo6Y29tcGFyZSgmb2xkX3NwZWMsICZuZXdfc3BlYyk7CgogICAgZGlmZjo6Y29tcGFyZV9lbnZfbWV0YWRhdGEoCiAgICAgICAgb2xkX21ldGEuZW52X21ldGEuYXNfcmVmKCksCiAgICAgICAgbmV3X21ldGEuZW52X21ldGEuYXNfcmVmKCksCiAgICAgICAgJm11dCBkaWZmX3JlcG9ydCwKICAgICk7CgogICAgZGlmZjo6Y29tcGFyZV9ob3N0X2ltcG9ydHMoCiAgICAgICAgJm9sZF9tZXRhLmhvc3RfaW1wb3J0cywKICAgICAgICAmbмV3X21ldGEuaG9zdF9pbXBvcnRzLAogICAgICAgIG9sZF9tZXRhLmVudl9tZXRhLmFzX3JlZigpLAogICAgICAgIG5ld19tZXRhLmVudl9tZXRhLmFzX3JlZigpLAogICAgICAgICZtdXQgZGlmZl9yZXBvcnQsCiAgICApOwoKICAgIGRpZmY6OmNvbXBhcmVfcnVudGltZV9zdXJmYWNlcygKICAgICAgICAmb2xkX21ldGEucnVudGltZV9zdXJmYWNlLAogICAgICAgICZuZXdfbWV0YS5ydW50aW1lX3N1cmZhY2UsCiAgICAgICAgJm11dCBkaWZmX3JlcG9ydCwKICAgICk7CgogICAgbGV0IG11dCBzYWZldHlfcmVwb3J0ID0gU2FmZXR5UmVwb3J0Ojp3aXRoX3N1cHByZXNzaW9uc193aXRoX3NwZWNzKAogICAgICAgICZkaWZmX3JlcG9ydCwKICAgICAgICBzdXBwcmVzc2lvbnMsCiAgICAgICAgb3B0aW9ucy5leHBsYWluLAogICAgICAgIG9wdGlvbnMuc3RyaWN0LAogICAgICAgICZvbGRfc3BlYywKICAgICAgICAmbмV3X3NwZWMsCiAgICAgICAgb3B0aW9ucy5jb250cmFjdCwKICAgICk7CiAgICBzYWZldHlfcmVwb3J0LnNjb3BlLmV4cG9ydGVkX2ludGVyZmFjZSA9IHRydWU7CiAgICBzYWZldHlfcmVwb3J0LnNjb3BlLmVudl9tZXRhZGF0YSA9IG9sZF9tZXRhLmVudl9tZXRhLmlzX3NvbWUoKSB8fCBuZXdfbWV0YS5lbnZfbWV0YS5pc19zb21lKCk7CiAgICBzYWZldHlfcmVwb3J0Lm9sZF9zcGVjX3N1bW1hcnkgPSBTb21lKG9sZF9zcGVjLnN1bW1hcnkoKSk7CiAgICBzYWZldHlfcmVwb3J0Lm5ld19zcGVjX3N1bW1hcnkgPSBTb21lKG5ld19zcGVjLnN1bW1hcnkoKSk7CgogICAgaWYgbGV0IFNvbWUoKG9sZF9zY2hlbWEsIG5ld19zY2hlbWEpKSA9IG9wdGlvbnMuc3RvcmFnZV9zY2hlbWFzIHsKICAgICAgICBsZXQgc3RvcmFnZV9jb21wYXJpc29uID0gc3RvcmFnZV9zY2hlbWE6OmNvbXBhcmVfc3RvcmFnZV9zY2hlbWFzKAogICAgICAgICAgICBvbGRfc2NoZW1hLAogICAgICAgICAgICAmb2xkX21ldGEuc3RvcmFnZSwKICAgICAgICAgICAgbmV3X3NjaGVtYSwKICAgICAgICAgICAgJm5ld19tZXRhLnN0b3JhZ2UsCiAgICAgICAgKTsKICAgICAgICBzYWZldHlfcmVwb3J0LmFwcGx5X3N0b3JhZ2Vfc2NoZW1hX2NvbXBhcmlzb24oCiAgICAgICAgICAgICZzdG9yYWdlX2NvbXBhcmlzb24sCiAgICAgICAgICAgIHN1cHByZXNzaW9ucywKICAgICAgICAgICAgb3B0aW9ucy5leHBsYWluLAogICAgICAgICAgICBvcHRpb25zLnN0cmljdCwKICAgICAgICApOwogICAgfQoKICAgIGlmIGxldCBTb21lKHN0b3JlKSA9IG9wdGlvbnMubGluZWFnZV9zdG9yZSB7CiAgICAgICAgbGV0IGxpbmVhZ2VfcmVwb3J0ID0gbGluZWFnZTo6dmFsaWRhdGVfY2FuZGlkYXRlX2FnYWluc3RfbGluZWFnZSgKICAgICAgICAgICAgbmV3X3dhc20sCiAgICAgICAgICAgICZuZXdfc3BlYywKICAgICAgICAgICAgc3RvcmUsCiAgICAgICAgKTsKICAgICAgICBzYWZldHlfcmVwb3J0LmFwcGx5X2xpbmVhZ2VfcmVwb3J0KCZsaW5lYWdlX3JlcG9ydCk7CiAgICB9CgogICAgaWYgbGV0IFNvbWUobWFuaWZlc3QpID0gb3B0aW9ucy5idWlsZF9tYW5pZmVzdCB7CiAgICAgICAgbGV0IGNvbXBhcmlzb24gPSBidWlsZF9tYW5pZmVzdDo6Y29tcGFyZV9tYW5pZmVzdF90b19hcnRpZmFjdCgKICAgICAgICAgICAgbWFuaWZlc3QsCiAgICAgICAgICAgIG5ld193YXNtLAogICAgICAgICAgICBuZXdfbWV0YS5lbnZfbWV0YS5hc19yZWYoKSwKICAgICAgICApOwogICAgICAgIHNhZmV0eV9yZXBvcnQuYXBwbHlfYnVpbGRfbWFuaWZlc3RfY29tcGFyaXNvbigmY29tcGFyaXNvbik7CiAgICB9CgogICAgT2soc2FmZXR5X3JlcG9ydCkKfQo=
+// SPDX-License-Identifier: MIT
+
+//! # Soroban Upgrade Safeguard
+//!
+//! Library for analyzing and validating Soroban smart-contract upgrades on the
+//! Stellar network. It detects breaking changes in storage layout, function
+//! signatures, and event schemas before an upgrade is deployed.
+//!
+//! A breaking change has two independent axes in the output: whether a human
+//! *acknowledged* it ([`suppression`]) and whether a migration *handles* it
+//! ([`contract_migration`]). They are reported separately and never collapse
+//! into one another.
+
+#[cfg(feature = "unstable")]
+pub mod attestation;
+#[cfg(not(feature = "unstable"))]
+mod attestation;
+
+#[cfg(feature = "unstable")]
+pub mod budget;
+#[cfg(not(feature = "unstable"))]
+mod budget;
+pub mod bundle;
+#[cfg(not(feature = "unstable"))]
+mod bundle;
+
+#[cfg(feature = "unstable")]
+pub mod call_abi;
+#[cfg(not(feature = "unstable"))]
+mod call_abi;
+
+#[cfg(feature = "unstable")]
+pub mod capability;
+#[cfg(not(feature = "unstable"))]
+mod capability;
+
+#[cfg(feature = "unstable")]
+pub mod category;
+#[cfg(not(feature = "unstable"))]
+mod category;
+
+#[cfg(feature = "unstable")]
+pub mod classification;
+#[cfg(not(feature = "unstable"))]
+pub(crate) mod classification;
+
+#[cfg(feature = "unstable")]
+pub mod color;
+#[cfg(not(feature = "unstable"))]
+mod color;
+
+#[cfg(feature = "unstable")]
+pub mod config;
+#[cfg(not(feature = "unstable"))]
+mod config;
+
+#[cfg(feature = "unstable")]
+pub mod config_schema;
+#[cfg(not(feature = "unstable"))]
+mod config_schema;
+
+#[cfg(feature = "unstable")]
+pub mod decoder_registry;
+#[cfg(not(feature = "unstable"))]
+mod decoder_registry;
+
+#[cfg(feature = "unstable")]
+pub mod dependency;
+#[cfg(not(feature = "unstable"))]
+mod dependency;
+
+#[cfg(feature = "unstable")]
+pub mod diff;
+#[cfg(not(feature = "unstable"))]
+mod diff;
+
+#[cfg(feature = "unstable")]
+pub mod empirical;
+#[cfg(not(feature = "unstable"))]
+mod empirical;
+
+#[cfg(feature = "unstable")]
+pub mod error;
+#[cfg(not(feature = "unstable"))]
+mod error;
+
+pub mod interface_hash;
+
+#[cfg(feature = "unstable")]
+pub mod jsonl;
+#[cfg(not(feature = "unstable"))]
+mod jsonl;
+
+#[cfg(feature = "unstable")]
+pub mod loader;
+#[cfg(not(feature = "unstable"))]
+mod loader;
+
+#[cfg(feature = "unstable")]
+pub mod limits;
+#[cfg(not(feature = "unstable"))]
+mod limits;
+
+#[cfg(feature = "unstable")]
+#[cfg(feature = "unstable")]
+pub mod lint;
+#[cfg(not(feature = "unstable"))]
+mod lint;
+
+#[cfg(feature = "unstable")]
+pub mod manifest;
+#[cfg(not(feature = "unstable"))]
+mod manifest;
+#[cfg(feature = "unstable")]
+pub mod metadata_cache;
+#[cfg(not(feature = "unstable"))]
+mod metadata_cache;
+
+#[cfg(feature = "unstable")]
+pub mod mapper;
+#[cfg(not(feature = "unstable"))]
+mod mapper;
+
+#[cfg(feature = "unstable")]
+pub mod contract_migration;
+#[cfg(not(feature = "unstable"))]
+mod contract_migration;
+
+#[cfg(feature = "unstable")]
+pub mod migration;
+#[cfg(not(feature = "unstable"))]
+mod migration;
+
+#[cfg(feature = "unstable")]
+pub mod oci;
+#[cfg(not(feature = "unstable"))]
+mod oci;
+#[cfg(feature = "unstable")]
+pub mod oracle;
+#[cfg(not(feature = "unstable"))]
+mod oracle;
+
+#[cfg(feature = "unstable")]
+pub mod parser;
+#[cfg(not(feature = "unstable"))]
+mod parser;
+
+#[cfg(feature = "unstable")]
+pub mod preflight;
+#[cfg(not(feature = "unstable"))]
+mod preflight;
+
+#[cfg(feature = "unstable")]
+pub mod profile;
+#[cfg(not(feature = "unstable"))]
+mod profile;
+
+#[cfg(feature = "unstable")]
+pub mod redact;
+#[cfg(not(feature = "unstable"))]
+mod redact;
+
+#[cfg(feature = "unstable")]
+pub mod remote;
+#[cfg(not(feature = "unstable"))]
+mod remote;
+
+#[cfg(feature = "unstable")]
+pub mod render;
+#[cfg(not(feature = "unstable"))]
+mod render;
+
+#[cfg(feature = "unstable")]
+pub mod report;
+#[cfg(not(feature = "unstable"))]
+mod report;
+
+#[cfg(feature = "unstable")]
+pub mod report_schema;
+#[cfg(not(feature = "unstable"))]
+mod report_schema;
+
+#[cfg(feature = "unstable")]
+pub mod rpc;
+#[cfg(not(feature = "unstable"))]
+mod rpc;
+
+#[cfg(feature = "unstable")]
+pub mod rpc_bundle;
+#[cfg(not(feature = "unstable"))]
+mod rpc_bundle;
+
+#[cfg(feature = "unstable")]
+pub mod rpc_record;
+#[cfg(not(feature = "unstable"))]
+mod rpc_record;
+
+#[cfg(feature = "unstable")]
+pub mod runtime_surface;
+#[cfg(not(feature = "unstable"))]
+mod runtime_surface;
+
+#[cfg(feature = "unstable")]
+pub mod spec;
+#[cfg(not(feature = "unstable"))]
+mod spec;
+
+#[cfg(feature = "unstable")]
+pub mod spec_json;
+#[cfg(not(feature = "unstable"))]
+mod spec_json;
+
+#[cfg(feature = "unstable")]
+pub mod storage_inference;
+#[cfg(not(feature = "unstable"))]
+mod storage_inference;
+
+#[cfg(feature = "unstable")]
+pub mod storage_schema;
+#[cfg(not(feature = "unstable"))]
+mod storage_schema;
+
+#[cfg(feature = "unstable")]
+pub mod suppression;
+#[cfg(not(feature = "unstable"))]
+mod suppression;
+
+#[cfg(feature = "unstable")]
+pub mod lineage;
+#[cfg(not(feature = "unstable"))]
+pub mod lineage;
+
+#[cfg(feature = "unstable")]
+pub mod watch_status;
+#[cfg(not(feature = "unstable"))]
+mod watch_status;
+
+#[cfg(feature = "unstable")]
+pub mod wasm_complexity;
+#[cfg(not(feature = "unstable"))]
+mod wasm_complexity;
+
+// Stable public API exports at the root
+pub use crate::attestation::{
+    sign_statement, verify_artifacts, verify_signatures, ArtifactDigest, AttestationSigner,
+    DsseEnvelope, Ed25519Signer, InTotoStatementV1, SafeguardPredicateV1, SignatureVerification,
+    VerificationFailure, VerificationFailureKind, VerificationPolicy,
+};
+pub use crate::call_abi::{
+    CallAbiBreak, CallAbiCompatibility, CallDirection, DirectionalCallVerdict,
+};
+pub use crate::config_schema::{
+    config_schema, config_schema_value, generate_config_completion, manifest_schema,
+    manifest_schema_value, validate_batch_manifest, validate_config_file,
+    validate_safeguard_config, BatchManifestDocument, ConfigDiagnostic, ConfigEditorCatalog,
+    ConfigValidationResult, EditorCompletionItem, EditorHoverMetadata, SafeguardConfigDocument,
+    CONFIG_SCHEMA_VERSION, MANIFEST_SCHEMA_VERSION,
+};
+pub use crate::diff::{Finding, Severity};
+pub use crate::lineage::{
+    validate_candidate_against_lineage, HistoricalFinding, LineageRecord, LineageStore,
+    LineageValidationReport, LiveStatus, LiveVersionPolicy,
+};
+pub use crate::oci::{
+    OciArtifact, OciArtifactKind, OciFetchConfig, OciReference, OciSelector,
+    MEDIA_TYPE_EXTRACTED_SPEC, MEDIA_TYPE_WASM,
+};
+pub use crate::remote::{
+    default_cache_dir, fetch_verified, CacheStatus, FetchedArtifact, RemoteFetchConfig, RemoteRef,
+};
+pub use crate::report::{ReportedFinding, SafetyReport};
+pub use crate::runtime_surface::{
+    DataSegmentSummary, ElementSegmentSummary, GlobalDeclaration, MemoryDeclaration,
+    RuntimeSurface, TableDeclaration,
+};
+pub use crate::spec_json::{InterfaceLockfile, INTERFACE_LOCKFILE_SCHEMA_VERSION};
+pub use crate::storage_schema::{
+    SchemaFormat, StorageReconciliation, StorageSchema, StorageSchemaComparison,
+};
+
+use std::path::Path;
+
+use anyhow::{Context, Result};
+
+use crate::spec::ContractSpec;
+use crate::suppression::SuppressionConfig;
+
+/// Infer and reconcile storage use for a single compiled contract.
+pub fn analyze_wasm_storage_schema(
+    wasm: &[u8],
+    schema: &StorageSchema,
+) -> Result<StorageReconciliation> {
+    let metadata =
+        parser::extract_metadata(wasm).context("Failed to analyze storage use in WASM")?;
+    Ok(schema.reconcile(&metadata.storage))
+}
+
+/// Infer and reconcile storage use for both sides of an upgrade.
+pub fn compare_wasm_storage_schemas(
+    old_wasm: &[u8],
+    old_schema: &StorageSchema,
+    new_wasm: &[u8],
+    new_schema: &StorageSchema,
+) -> Result<StorageSchemaComparison> {
+    let old = parser::extract_metadata(old_wasm)
+        .context("Failed to analyze storage use in the old WASM")?;
+    let new = parser::extract_metadata(new_wasm)
+        .context("Failed to analyze storage use in the new WASM")?;
+    Ok(storage_schema::compare_storage_schemas(
+        old_schema,
+        &old.storage,
+        new_schema,
+        &new.storage,
+    ))
+}
+
+/// Compare two Soroban contract builds supplied as raw WASM byte slices.
+pub fn compare_wasm_bytes(old_wasm: &[u8], new_wasm: &[u8]) -> Result<SafetyReport> {
+    let old_meta = parser::extract_metadata(old_wasm)
+        .context("Failed to extract metadata from the old WASM")?;
+    let new_meta = parser::extract_metadata(new_wasm)
+        .context("Failed to extract metadata from the new WASM")?;
+
+    let old_spec = ContractSpec::from_entries(&old_meta.spec);
+    let new_spec = ContractSpec::from_entries(&new_meta.spec);
+
+    let mut diff_report = diff::compare(&old_spec, &new_spec);
+    diff::compare_runtime_surfaces(
+        &old_meta.runtime_surface,
+        &new_meta.runtime_surface,
+        &mut diff_report,
+    );
+
+    Ok(
+        SafetyReport::new_with_specs(&diff_report, &old_spec, &new_spec)
+            .with_interface_hashes(old_spec.interface_hash(), new_spec.interface_hash()),
+    )
+}
+
+/// Compare two Soroban contract builds read from WASM files on disk.
+pub fn compare_wasm_files(old_path: &Path, new_path: &Path) -> Result<SafetyReport> {
+    let old = loader::load_wasm(old_path).map_err(|e| anyhow::anyhow!("{}", e))?;
+    let new = loader::load_wasm(new_path).map_err(|e| anyhow::anyhow!("{}", e))?;
+    compare_wasm_bytes(&old.bytes, &new.bytes)
+}
+
+/// Options for the analysis pipeline.
+#[derive(Default)]
+pub struct CompareOptions<'a> {
+    pub suppressions: Option<&'a SuppressionConfig>,
+    pub explain: bool,
+    pub strict: bool,
+    pub storage_schemas: Option<(&'a StorageSchema, &'a StorageSchema)>,
+    pub lineage_store: Option<&'a lineage::LineageStore>,
+    /// The contract's name, used to scope migrations declared with
+    /// `contracts = [..]` in a `.safeguard.toml` shared across several
+    /// contracts. `None` matches only migrations with no `contracts` key.
+    pub contract: Option<&'a str>,
+    /// Complexity budgets for the WASM code section. When non-empty the
+    /// profiler is invoked and exceeded entries gate `is_safe`.
+    pub complexity_budget: Option<&'a crate::wasm_complexity::ComplexityBudgetConfig>,
+}
+
+/// Compare two Soroban contract builds supplied as raw WASM byte slices with options.
+pub fn compare_wasm_bytes_with_options(
+    old_wasm: &[u8],
+    new_wasm: &[u8],
+    options: &CompareOptions<'_>,
+) -> Result<SafetyReport> {
+    let empty_suppressions = SuppressionConfig::default();
+    let suppressions = options.suppressions.unwrap_or(&empty_suppressions);
+
+    let old_meta = parser::extract_metadata(old_wasm)
+        .context("Failed to extract metadata from the old WASM")?;
+    let new_meta = parser::extract_metadata(new_wasm)
+        .context("Failed to extract metadata from the new WASM")?;
+
+    let old_spec = ContractSpec::from_entries(&old_meta.spec);
+    let new_spec = ContractSpec::from_entries(&new_meta.spec);
+
+    let mut diff_report = diff::compare(&old_spec, &new_spec);
+
+    diff::compare_env_metadata(
+        old_meta.env_meta.as_ref(),
+        new_meta.env_meta.as_ref(),
+        &mut diff_report,
+    );
+
+    diff::compare_host_imports(
+        &old_meta.host_imports,
+        &new_meta.host_imports,
+        old_meta.env_meta.as_ref(),
+        new_meta.env_meta.as_ref(),
+        &mut diff_report,
+    );
+
+    diff::compare_runtime_surfaces(
+        &old_meta.runtime_surface,
+        &new_meta.runtime_surface,
+        &mut diff_report,
+    );
+
+    let mut safety_report = SafetyReport::with_suppressions_with_specs(
+        &diff_report,
+        suppressions,
+        options.explain,
+        options.strict,
+        &old_spec,
+        &new_spec,
+        options.contract,
+    );
+    safety_report.scope.exported_interface = true;
+    safety_report.scope.env_metadata = old_meta.env_meta.is_some() || new_meta.env_meta.is_some();
+    safety_report.old_spec_summary = Some(old_spec.summary());
+    safety_report.new_spec_summary = Some(new_spec.summary());
+
+    if let Some((old_schema, new_schema)) = options.storage_schemas {
+        let storage_comparison = storage_schema::compare_storage_schemas(
+            old_schema,
+            &old_meta.storage,
+            new_schema,
+            &new_meta.storage,
+        );
+        safety_report.apply_storage_schema_comparison(
+            &storage_comparison,
+            suppressions,
+            options.explain,
+            options.strict,
+        );
+    }
+
+    if let Some(store) = options.lineage_store {
+        let lineage_report = lineage::validate_candidate_against_lineage(
+            new_wasm,
+            &new_spec,
+            store,
+            suppressions,
+            options.strict,
+        )?;
+        safety_report.apply_lineage_report(
+            &lineage_report,
+            suppressions,
+            options.explain,
+            options.strict,
+        );
+    }
+
+    // Run the WASM complexity profiler when a budget is configured, or
+    // unconditionally when an empty budget is passed (so the profile still
+    // appears in the report for informational purposes).
+    if let Some(budget) = options.complexity_budget {
+        safety_report.apply_complexity(old_wasm, new_wasm, budget);
+    }
+
+    Ok(safety_report)
+}
+
+/// Compare a Soroban contract build against a serialized interface lockfile.
+///
+/// Lockfile comparisons intentionally cover only the exported interface. A
+/// lockfile contains no WASM metadata for host imports, runtime surface, or
+/// environment metadata, so those axes are not inferred from the snapshot.
+pub fn compare_wasm_against_interface_lockfile(
+    lockfile_json: &str,
+    new_wasm: &[u8],
+    options: &CompareOptions<'_>,
+) -> Result<SafetyReport> {
+    let lockfile = InterfaceLockfile::from_json_str(lockfile_json)
+        .map_err(|error| anyhow::anyhow!("Invalid interface lockfile: {error}"))?;
+    let old_spec = lockfile
+        .to_contract_spec()
+        .map_err(|error| anyhow::anyhow!("Invalid interface lockfile: {error}"))?;
+    let new_meta = parser::extract_metadata(new_wasm)
+        .context("Failed to extract metadata from the candidate WASM")?;
+    let new_spec = ContractSpec::from_entries(&new_meta.spec);
+    let diff_report = diff::compare(&old_spec, &new_spec);
+    let empty_suppressions = SuppressionConfig::default();
+    let suppressions = options.suppressions.unwrap_or(&empty_suppressions);
+    let mut report = SafetyReport::with_suppressions_with_specs(
+        &diff_report,
+        suppressions,
+        options.explain,
+        options.strict,
+        &old_spec,
+        &new_spec,
+        options.contract,
+    )
+    .with_interface_hashes(old_spec.interface_hash(), new_spec.interface_hash());
+    report.scope.exported_interface = true;
+    report.old_spec_summary = Some(old_spec.summary());
+    report.new_spec_summary = Some(new_spec.summary());
+    Ok(report)
+}
+
+/// Compare two Soroban contract builds read from WASM files on disk with options.
+pub fn compare_wasm_files_with_options(
+    old_path: &Path,
+    new_path: &Path,
+    options: &CompareOptions<'_>,
+) -> Result<SafetyReport> {
+    let old = loader::load_wasm(old_path).map_err(|e| anyhow::anyhow!("{}", e))?;
+    let new = loader::load_wasm(new_path).map_err(|e| anyhow::anyhow!("{}", e))?;
+    compare_wasm_bytes_with_options(&old.bytes, &new.bytes, options)
+}

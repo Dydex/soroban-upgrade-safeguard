@@ -206,14 +206,46 @@ soroban-upgrade-safeguard old.wasm new.wasm --config .safeguard.release.toml --s
 soroban-upgrade-safeguard old.wasm new.wasm --no-config
 ```
 
+## Schema Validation and Editor Completion
+
+All configuration files resolved through the precedence tiers are validated against the canonical Draft-07 JSON Schema before execution begins:
+
+- **Strict Structure**: Unknown keys, invalid data types, out-of-range numeric limits, and unrecognized enum values cause immediate validation errors before analysis.
+- **Accurate Diagnostics**: Errors report the file path, line number, column, and field path (e.g. `policy.rules.auth_boundary.action`).
+- **Dry-run Validation**: Run `soroban-upgrade-safeguard --validate-config` to check syntax and schema conformance without running comparison analysis.
+
+### Editor Auto-completion and Tooltips
+
+Add the `$schema` directive at the top of your `.safeguard.toml` or JSON configuration file to enable real-time validation, completions, and documentation tooltips in VS Code, IntelliJ, or other LSP-enabled editors:
+
+```toml
+"$schema" = "https://raw.githubusercontent.com/ShippedLabs/soroban-upgrade-safeguard/main/schemas/v1/safeguard-config.schema.json"
+
+[policy]
+severity = "error"
+```
+
+Or extract the schema and completion catalog directly from the CLI:
+
+```bash
+# Print canonical JSON Schema
+soroban-upgrade-safeguard print-schema --config
+
+# Generate editor completion catalog
+soroban-upgrade-safeguard print-schema --config --completion
+```
+
 ## See also
 
 - [`.safeguard.example.toml`](../.safeguard.example.toml) — annotated
   template covering suppression rules, `[require_reason]`, and named
   profiles
+- [Configuration Schema & Compatibility](config_schema_compatibility.md) —
+  canonical schema, completion catalog, and forward-compatibility policy
 - [Named Policy Profiles](named_policy_profiles.md) — selecting a profile
   within a resolved config via `--profile` or `SAFEGUARD_PROFILE`
 - [Documentation: Config file](documentation.md#config-file) — quick
   reference in the main docs
 - [Suppression Security Policy](suppression_security_policy.md) — when
   suppressions require a `reason` and how that is enforced
+

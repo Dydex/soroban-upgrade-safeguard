@@ -51,6 +51,16 @@ pub enum CompatibilityAxis {
 }
 
 impl CompatibilityAxis {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            CompatibilityAxis::StorageLayout => "storage_layout",
+            CompatibilityAxis::CallAbi => "call_abi",
+            CompatibilityAxis::EventIndexer => "event_indexer",
+            CompatibilityAxis::SourceLevel => "source_level",
+            CompatibilityAxis::RuntimeSurface => "runtime_surface",
+        }
+    }
+
     pub fn default_severity(&self) -> Severity {
         match self {
             CompatibilityAxis::StorageLayout => Severity::Critical,
@@ -59,6 +69,12 @@ impl CompatibilityAxis {
             CompatibilityAxis::SourceLevel => Severity::Info,
             CompatibilityAxis::RuntimeSurface => Severity::Critical,
         }
+    }
+}
+
+impl std::fmt::Display for CompatibilityAxis {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
     }
 }
 

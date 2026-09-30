@@ -138,6 +138,9 @@ pub struct RawManifest {
     /// Only version 1 is currently supported.
     #[serde(default = "default_manifest_version")]
     pub version: u32,
+    /// Schema reference for editor autocompletion and hover metadata.
+    #[serde(default, rename = "$schema")]
+    pub schema: Option<String>,
     /// Other manifest files to compose in, depth-first, in order.
     #[serde(default)]
     pub include: Vec<PathBuf>,
@@ -160,6 +163,7 @@ impl Default for RawManifest {
     fn default() -> Self {
         Self {
             version: 1,
+            schema: None,
             include: Vec::new(),
             defaults: RawDefaults::default(),
             pairs: Vec::new(),
@@ -357,6 +361,24 @@ impl BuildManifest {
         Ok(manifest)
     }
 
+    /// Parse a build manifest whose serialization format is known up front.
+    ///
+    /// Unlike [`BuildManifest::parse`], which tries TOML then JSON, this
+    /// rejects input that does not match the given format exactly. Validation
+    /// is the same: unknown fields and unsupported versions are rejected.
+    pub fn parse_with_format(text: &str, format: ManifestFormat) -> Result<Self> {
+        let manifest: Self = match format {
+            ManifestFormat::Json => {
+                serde_json::from_str(text).context("failed to parse build manifest as JSON")?
+            }
+            ManifestFormat::Toml => {
+                toml::from_str(text).context("failed to parse build manifest as TOML")?
+            }
+        };
+        manifest.validate()?;
+        Ok(manifest)
+    }
+
     /// Validate the manifest's structural invariants.
     ///
     /// This is deliberately independent of interface compatibility gating:
@@ -413,6 +435,26 @@ pub struct ProvenanceReport {
     pub mismatches: Vec<ProvenanceFinding>,
 }
 
+/// The serialization format of a build manifest file.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ManifestFormat {
+    /// JSON encoding.
+    Json,
+    /// TOML encoding.
+    Toml,
+}
+
+/// One manifest field that disagreed with the artifact's embedded metadata.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, schemars::JsonSchema)]
+pub struct ManifestMismatch {
+    /// The manifest field that mismatched (e.g. `features`).
+    pub field: String,
+    /// The value recorded in the build manifest.
+    pub expected: String,
+    /// The value observed in the artifact metadata.
+    pub actual: String,
+}
+
 impl ProvenanceReport {
     /// Compare a build manifest against observed artifact metadata.
     ///
@@ -420,10 +462,7 @@ impl ProvenanceReport {
     /// artifact. Fields absent from `observed` are recorded as unverified
     /// rather than mismatched, since metadata alone cannot prove equivalence.
     #[must_use]
-    pub fn compare(
-        manifest: &BuildManifest,
-        observed: &BTreeMap<String, String>,
-    ) -> Self {
+    pub fn compare(manifest: &BuildManifest, observed: &BTreeMap<String, String>) -> Self {
         let mut report = Self::default();
         let mut check = |field: &str, expected: Option<&str>| {
             let Some(expected) = expected else {
@@ -1231,11 +1270,35 @@ fn parse_file(path: &Path) -> Result<RawManifest> {
         || content.trim_start().starts_with(['{', '[']);
 
     let toml_error = match toml::from_str::<RawManifest>(content) {
-        Ok(manifest) => return Ok(manifest),
+        Ok(manifest) => {
+            if manifest.version == 1 {
+                if let Err(diags) = crate::config_schema::validate_batch_manifest(content, path) {
+                    let formatted = diags
+                        .iter()
+                        .map(|d| d.to_string())
+                        .collect::<Vec<_>>()
+                        .join("\n");
+                    bail!("Invalid manifest '{}':\n{}", path.display(), formatted);
+                }
+            }
+            return Ok(manifest);
+        }
         Err(e) => e.to_string(),
     };
     let json_error = match serde_json::from_str::<RawManifest>(content) {
-        Ok(manifest) => return Ok(manifest),
+        Ok(manifest) => {
+            if manifest.version == 1 {
+                if let Err(diags) = crate::config_schema::validate_batch_manifest(content, path) {
+                    let formatted = diags
+                        .iter()
+                        .map(|d| d.to_string())
+                        .collect::<Vec<_>>()
+                        .join("\n");
+                    bail!("Invalid manifest '{}':\n{}", path.display(), formatted);
+                }
+            }
+            return Ok(manifest);
+        }
         Err(e) => format!("{e}"),
     };
 
