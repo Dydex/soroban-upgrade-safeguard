@@ -33,12 +33,10 @@ soroban-upgrade-safeguard ./wasm/v1.wasm ./wasm/v2.wasm
 This compares the old build (`v1.wasm`) against the new build (`v2.wasm`) and reports any breaking changes. The command exits with a non-zero code if critical issues are found, making it perfect for CI/CD pipelines.
 
 **See also:**
-
 - [Installation](#installation) for alternative install methods including Docker
 - [Usage](#usage) for detailed command-line options, strict mode, and output formats
 - [Choosing an Input Source](docs/choosing-an-input-source.md) for RPC, HTTPS, and OCI input sources
 - [Documentation](docs/documentation.md) for how the analysis works
-
 ## Table of Contents
 
 - [Features](#features)
@@ -138,19 +136,19 @@ them. The following subcommands do other jobs. Run
 `soroban-upgrade-safeguard <SUBCOMMAND> --help` to see a subcommand's
 flags.
 
-| Subcommand           | What it does                                                                                                             | Details                                                                       |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
-| `extract`            | Prints one build's decoded interface as JSON, or only its interface hash with `--hash-only`                              | [Inspecting a single build](#inspecting-a-single-build)                       |
-| `lockfile`           | Writes a committed snapshot of one build's exported interface                                                            | [Pinning an interface with a lockfile](#pinning-an-interface-with-a-lockfile) |
-| `render`             | Renders a saved JSON report as text or Markdown                                                                          | [Re-rendering a saved report](#re-rendering-a-saved-report)                   |
-| `upgrade-report`     | Migrates a saved JSON report to the latest schema version                                                                | [Report migrations](docs/report_migrations.md)                                |
-| `init`               | Generates a `.safeguard.toml` suppression config from the current findings                                               | [Suppressing known breaking changes](#suppressing-known-breaking-changes)     |
-| `attest`             | Creates a signed DSSE in-toto attestation for a saved report                                                             | [Signing and verifying reports](#signing-and-verifying-reports)               |
-| `verify-attestation` | Verifies an attestation and every artifact it references, offline                                                        | [Signing and verifying reports](#signing-and-verifying-reports)               |
-| `stream`             | Runs in JSON Lines batch mode: reads one job per line on stdin and writes one result per line to stdout                  | `stream --help`                                                               |
-| `lint`               | Checks one contract spec, and optionally a storage schema, for structural problems without comparing it to another build | [Lint rules reference](docs/lint_rules_reference.md)                          |
-| `preflight`          | Checks RPC connectivity and the JSON-RPC response format without fetching any contract code                              | [RPC security checklist](docs/rpc-security-checklist.md)                      |
-| `print-schema`       | Prints the JSON Schema of the `--format json` report to stdout and exits                                                 | [Printing the report schema](#printing-the-report-json-schema)                |
+| Subcommand | What it does | Details |
+|------------|--------------|---------|
+| `extract` | Prints one build's decoded interface as JSON, or only its interface hash with `--hash-only` | [Inspecting a single build](#inspecting-a-single-build) |
+| `lockfile` | Writes a committed snapshot of one build's exported interface | [Pinning an interface with a lockfile](#pinning-an-interface-with-a-lockfile) |
+| `render` | Renders a saved JSON report as text or Markdown | [Re-rendering a saved report](#re-rendering-a-saved-report) |
+| `upgrade-report` | Migrates a saved JSON report to the latest schema version | [Report migrations](docs/report_migrations.md) |
+| `init` | Generates a `.safeguard.toml` suppression config from the current findings | [Suppressing known breaking changes](#suppressing-known-breaking-changes) |
+| `attest` | Creates a signed DSSE in-toto attestation for a saved report | [Signing and verifying reports](#signing-and-verifying-reports) |
+| `verify-attestation` | Verifies an attestation and every artifact it references, offline | [Signing and verifying reports](#signing-and-verifying-reports) |
+| `stream` | Runs in JSON Lines batch mode: reads one job per line on stdin and writes one result per line to stdout | `stream --help` |
+| `lint` | Checks one contract spec, and optionally a storage schema, for structural problems without comparing it to another build | [Lint rules reference](docs/lint_rules_reference.md) |
+| `preflight` | Checks RPC connectivity and the JSON-RPC response format without fetching any contract code | [RPC security checklist](docs/rpc-security-checklist.md) |
+| `print-schema` | Prints the JSON Schema of the `--format json` report to stdout and exits | [Printing the report schema](#printing-the-report-json-schema) |
 
 ### Strict mode
 
@@ -355,7 +353,7 @@ rejected whether or not `--allow-http-local` is set.
 
 ### Validating against captured storage entries
 
-Structural comparison answers whether the _shapes_ the new build declares are
+Structural comparison answers whether the *shapes* the new build declares are
 compatible with the old ones. Empirical validation answers a narrower, more
 concrete question: does the data that actually exists still decode under the new
 spec? Point `--empirical-file` at a JSON file of captured ledger/storage entries
@@ -636,7 +634,7 @@ It exits non-zero without comparing anything.
 Two limits are worth knowing:
 
 - The check applies to the **final component** of the path, including a chain of
-  several links. A symlinked _parent directory_ is not rejected, so
+  several links. A symlinked *parent directory* is not rejected, so
   `--no-symlinks` is not a guarantee that no part of the path traversed a link.
 - It applies only to local paths. Reading from stdin (`-`), an RPC baseline, an
   `https://` reference, or an `oci://` reference has no symlink to resolve, and
@@ -675,11 +673,11 @@ soroban-upgrade-safeguard ./wasm/v1.wasm \
 Every fetch is limited in size, time, and number of redirects. The
 following flags control these limits:
 
-| Flag                              | Default             | What it limits                                                                                                                          |
-| --------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `--remote-max-bytes <BYTES>`      | `67108864` (64 MiB) | Size of the response body. The body is read only up to this limit, whatever `Content-Length` says, and a larger artifact fails the run. |
-| `--remote-timeout-secs <SECONDS>` | `30`                | Total time for a single request.                                                                                                        |
-| `--remote-max-redirects <COUNT>`  | `5`                 | Number of redirects followed before the fetch fails. `0` means no redirects are followed.                                               |
+| Flag | Default | What it limits |
+|------|---------|----------------|
+| `--remote-max-bytes <BYTES>` | `67108864` (64 MiB) | Size of the response body. The body is read only up to this limit, whatever `Content-Length` says, and a larger artifact fails the run. |
+| `--remote-timeout-secs <SECONDS>` | `30` | Total time for a single request. |
+| `--remote-max-redirects <COUNT>` | `5` | Number of redirects followed before the fetch fails. `0` means no redirects are followed. |
 
 The limits apply to every `https://` input in the run, and each input is
 limited separately. For example, you might raise the size limit for an
@@ -710,7 +708,7 @@ format, caching, and error messages.
 
 A two-build comparison only ever checks a candidate against its immediate
 predecessor. That misses a real failure mode: a contract that accumulates
-deployed versions over time can have storage entries written by an _old_
+deployed versions over time can have storage entries written by an *old*
 release (`v1.0.0`) that no intermediate release ever touched again. If a
 later candidate (`v4.0.0`) changes or removes a type `v1.0.0` wrote but
 `v3.0.0` never read, comparing only `v3.0.0` vs `v4.0.0` reports a clean
@@ -800,7 +798,7 @@ soroban-upgrade-safeguard ./wasm/v1.wasm ./wasm/v2.wasm \
 ```
 
 Like `--record-version`, it requires `--lineage-store` and is otherwise a
-silent no-op — and retiring a `<VERSION_ID>` that isn't in the store is _also_
+silent no-op — and retiring a `<VERSION_ID>` that isn't in the store is *also*
 a silent no-op rather than an error, so a typo won't fail your run but won't
 retire anything either. Retiring happens **before** validation, so the
 version is already excluded from that same run's lineage check.
@@ -809,7 +807,7 @@ version is already excluded from that same run's lineage check.
 written back to `--lineage-store`'s path when `--record-version` is also
 given — so `--retire-version` alone updates the in-memory ledger for this
 run's validation but leaves the file on disk untouched, and the retirement
-won't apply to the _next_ run either. To make a retirement durable, pair it
+won't apply to the *next* run either. To make a retirement durable, pair it
 with `--record-version` in the same invocation, usually when you record the
 next release:
 
@@ -1073,12 +1071,12 @@ accepted. Some formats also have a short alias. Aliases are accepted only
 in the `FORMAT` part of an [`--output`](#multiple-output-formats) spec,
 such as `md:report.md`, not as a `--format` value:
 
-| Format         | `--format` value | Alias in `--output` | Output                                    |
-| -------------- | ---------------- | ------------------- | ----------------------------------------- |
-| Text (default) | `text`           | —                   | Colored, human-readable report            |
-| JSON           | `json`           | —                   | One machine-readable JSON document        |
-| Markdown       | `markdown`       | `md`                | Markdown for PR descriptions and comments |
-| GitHub Actions | `github-actions` | `gha`               | GitHub Actions workflow annotations       |
+| Format | `--format` value | Alias in `--output` | Output |
+|--------|------------------|---------------------|--------|
+| Text (default) | `text` | — | Colored, human-readable report |
+| JSON | `json` | — | One machine-readable JSON document |
+| Markdown | `markdown` | `md` | Markdown for PR descriptions and comments |
+| GitHub Actions | `github-actions` | `gha` | GitHub Actions workflow annotations |
 
 ```bash
 # Equivalent: long name with --format, alias in an --output spec
@@ -1093,11 +1091,11 @@ An unknown name is rejected, and the error lists the supported values.
 Subcommands that take `--format` use the same case-insensitive matching and
 also accept no aliases. Some of them accept fewer formats:
 
-| Subcommand  | `--format` values                            | Default |
-| ----------- | -------------------------------------------- | ------- |
-| `render`    | `text`, `markdown`                           | `text`  |
-| `lint`      | `text`, `json`, `markdown`                   | `text`  |
-| `preflight` | `text`, `json`, `markdown`, `github-actions` | `text`  |
+| Subcommand | `--format` values | Default |
+|------------|-------------------|---------|
+| `render` | `text`, `markdown` | `text` |
+| `lint` | `text`, `json`, `markdown` | `text` |
+| `preflight` | `text`, `json`, `markdown`, `github-actions` | `text` |
 
 ### Wrapping text output
 
@@ -1147,7 +1145,7 @@ soroban-upgrade-safeguard ./wasm/v1.wasm ./wasm/v2.wasm \
 
 ### Quiet output
 
-`--quiet` suppresses everything the tool narrates _about_ the run: the banner and
+`--quiet` suppresses everything the tool narrates *about* the run: the banner and
 separator lines, the per-file loading and spec-summary lines, config-discovery
 notes, batch pair headers, and the `report written to <path>` confirmations.
 
@@ -1180,7 +1178,6 @@ soroban-upgrade-safeguard ./wasm/v1.wasm ./wasm/v2.wasm --watch
 ```
 
 Watch mode:
-
 - Monitors both WASM files for changes using filesystem notifications.
 - Debounces rapid writes (e.g. from build tools) with a 300ms window by default.
 - Clears the terminal screen and re-renders the report on each change.
@@ -1295,11 +1292,11 @@ being scanned. `*` stands for any run of characters except `/`, `?` for
 exactly one character, and `**` for any run including `/`; every other
 character is literal:
 
-| Pattern                | Matches                                         | Does not match            |
-| ---------------------- | ----------------------------------------------- | ------------------------- |
-| `vendor_*.wasm`        | `vendor_acme.wasm`                              | `nested/vendor_acme.wasm` |
-| `**/test_fixture.wasm` | `nested/test_fixture.wasm`, `test_fixture.wasm` | `test_fixture.wasm.bak`   |
-| `token.wasm`           | `token.wasm`                                    | `Token.wasm`              |
+| Pattern | Matches | Does not match |
+|---------|---------|----------------|
+| `vendor_*.wasm` | `vendor_acme.wasm` | `nested/vendor_acme.wasm` |
+| `**/test_fixture.wasm` | `nested/test_fixture.wasm`, `test_fixture.wasm` | `test_fixture.wasm.bak` |
+| `token.wasm` | `token.wasm` | `Token.wasm` |
 
 The exclusion applies identically to both scanned directories: an excluded
 file forms no pair, is never reported as old-only or new-only, and cannot
@@ -1399,7 +1396,7 @@ That name is what every batch output keys off:
 - the `::group::token` log group in GitHub Actions output;
 - the file name written under `--per-contract-output-dir`.
 
-It also identifies a pair that _fails_: a pair whose comparison errors is
+It also identifies a pair that *fails*: a pair whose comparison errors is
 reported under its name rather than a path, so the failing entry is
 recognisable at a glance. Because identity has to be unambiguous, two pairs
 resolving to the same name is a hard error, raised before any comparison runs
@@ -1470,7 +1467,7 @@ name: Soroban Upgrade Safety Report
 on:
   pull_request:
     paths:
-      - "wasm/**/*.wasm"
+      - 'wasm/**/*.wasm'
 
 jobs:
   safeguard-report:
@@ -1519,10 +1516,10 @@ For the exact categories emitted at each severity — the strings to use in supp
 
 The codes in this table apply to the default comparison command and to all subcommands **except `lint`**, which uses its own separate set. See [Lint Rules Reference — Exit codes](docs/lint_rules_reference.md#exit-codes) for those.
 
-| Code | Meaning                                                                                                                                                                                                                                                                                                                                                             |
-| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `0`  | Success. No unsuppressed Critical findings. With `--strict`, also no Warning findings. `--show-config` and `--validate-config` exit `0` after printing or validating configuration without loading any WASM.                                                                                                                                                        |
-| `1`  | Failure. At least one unsuppressed Critical finding; or, with `--strict`, at least one Warning finding. Also returned for configuration errors (invalid flags, missing inputs, unknown format names), a baseline hash mismatch (via `--expected-wasm-hash`), a symlink input rejected by `--no-symlinks`, or an interface drift detected by `--interface-lockfile`. |
+| Code | Meaning |
+|------|---------|
+| `0` | Success. No unsuppressed Critical findings. With `--strict`, also no Warning findings. `--show-config` and `--validate-config` exit `0` after printing or validating configuration without loading any WASM. |
+| `1` | Failure. At least one unsuppressed Critical finding; or, with `--strict`, at least one Warning finding. Also returned for configuration errors (invalid flags, missing inputs, unknown format names), a baseline hash mismatch (via `--expected-wasm-hash`), a symlink input rejected by `--no-symlinks`, or an interface drift detected by `--interface-lockfile`. |
 
 Watch mode (`--watch`) keeps the process running regardless of comparison verdict — a `1` from a comparison cycle does **not** terminate the watcher.
 
