@@ -10,6 +10,16 @@ Get up and running in seconds:
 
 ### Install
 
+On macOS, install the latest published binary from the project tap:
+
+```bash
+brew tap ShippedLabs/soroban-upgrade-safeguard https://github.com/ShippedLabs/soroban-upgrade-safeguard.git
+brew install soroban-upgrade-safeguard
+```
+
+The Homebrew formula is published with the first binary release. To install
+from source instead, use:
+
 ```bash
 cargo install --path .
 ```
@@ -90,6 +100,16 @@ This compares the old build (`v1.wasm`) against the new build (`v2.wasm`) and re
 - **GitHub Action**: Reusable action that posts the Markdown report as a PR comment and updates it in-place on subsequent pushes.
 
 ## Installation
+
+On macOS, install the latest published binary from the project tap:
+
+```bash
+brew tap ShippedLabs/soroban-upgrade-safeguard https://github.com/ShippedLabs/soroban-upgrade-safeguard.git
+brew install soroban-upgrade-safeguard
+```
+
+The Homebrew formula is published with the first binary release. To install
+from source, use:
 
 ```bash
 cargo install --path .
