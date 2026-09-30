@@ -261,7 +261,7 @@ old = "v2.wasm"
 new = "v3.wasm"
 name = "third_contract"
 "#;
-    let manifest = write_file(&dir, "manifest.toml", manifest_content);
+    let manifest = write_file(&dir, "manifest.toml", &manifest_content);
 
     let run = run_manifest(&manifest, &["--explain-manifest"]);
 
@@ -309,7 +309,7 @@ old = "v1.wasm"
 new = "v2.wasm"
 name = "real_contract"
 "#;
-    let manifest = write_file(&dir, "manifest.toml", manifest_content);
+    let manifest = write_file(&dir, "manifest.toml", &manifest_content);
 
     let run = run_manifest(&manifest, &["--explain-manifest"]);
 
@@ -406,7 +406,7 @@ new = "v3.wasm"
 name = "overrides_strict"
 strict = true
 "#;
-    let manifest = write_file(&dir, "manifest.toml", manifest_content);
+    let manifest = write_file(&dir, "manifest.toml", &manifest_content);
 
     let run = run_manifest(&manifest, &["--explain-manifest"]);
 
