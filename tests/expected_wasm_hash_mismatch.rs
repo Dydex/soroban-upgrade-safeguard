@@ -184,7 +184,10 @@ fn expected_wasm_hash_is_case_insensitive() {
     let json: serde_json::Value =
         serde_json::from_str(&run.stdout).expect("output must be valid JSON");
 
-    assert!(json.get("findings_by_category").is_some(), "comparison must have run");
+    assert!(
+        json.get("findings_by_category").is_some(),
+        "comparison must have run"
+    );
 }
 
 #[test]

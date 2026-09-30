@@ -719,17 +719,18 @@ fn fetch_wasm_from_code_hash_inner(
         hash: Hash(requested_hash),
     });
 
-    let code_key_b64 = code_ledger_key
-        .to_xdr_base64(Limits::none())
-        .map_err(|e| Error::XdrDecoding {
-            entry_index: None,
-            byte_offset: None,
-            details: format!(
-                "Failed to serialize ContractCode LedgerKey to base64: {}",
-                e
-            ),
-            source: Some(Box::new(e)),
-        })?;
+    let code_key_b64 =
+        code_ledger_key
+            .to_xdr_base64(Limits::none())
+            .map_err(|e| Error::XdrDecoding {
+                entry_index: None,
+                byte_offset: None,
+                details: format!(
+                    "Failed to serialize ContractCode LedgerKey to base64: {}",
+                    e
+                ),
+                source: Some(Box::new(e)),
+            })?;
 
     let code_response = query_rpc(
         rpc_url,
@@ -745,15 +746,17 @@ fn fetch_wasm_from_code_hash_inner(
         .ok_or_else(|| Error::RpcProtocol {
             rpc_url: crate::rpc::redact_url(rpc_url),
             code: 0,
-            message: "RPC response for contract code did not contain 'entries' array"
-                .to_string(),
+            message: "RPC response for contract code did not contain 'entries' array".to_string(),
         })?;
 
     if code_entries.is_empty() {
         return Err(Error::RpcProtocol {
             rpc_url: crate::rpc::redact_url(rpc_url),
             code: 0,
-            message: format!("WASM code not found on-chain for hash {}", requested_hash_hex),
+            message: format!(
+                "WASM code not found on-chain for hash {}",
+                requested_hash_hex
+            ),
         });
     }
 
