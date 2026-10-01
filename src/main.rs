@@ -735,6 +735,13 @@ struct Args {
     /// Maximum live historical versions to validate candidate against.
     #[arg(long, value_name = "N")]
     max_live_versions: Option<usize>,
+
+    /// Write an OpenMetrics-format metrics snapshot to this file after the
+    /// run completes. The file is written atomically (rename from a temp
+    /// file in the same directory). Metrics never include contract IDs,
+    /// RPC URLs, file paths, or finding messages as label values.
+    #[arg(long, value_name = "PATH")]
+    metrics_file: Option<PathBuf>,
 }
 
 /// Build the remote-fetch policy for `https://` inputs from the top-level CLI flags.
@@ -2501,6 +2508,8 @@ fn run_init(args: &InitArgs) -> Result<()> {
 }
 
 fn main() -> Result<()> {
+    let metrics = soroban_upgrade_safeguard::metrics::MetricsRegistry::new();
+    let run_start = std::time::Instant::now();
     let args = Args::parse();
 
     if args.clear_remote_cache {
@@ -2715,10 +2724,24 @@ fn main() -> Result<()> {
     if is_batch {
         // Batch mode resolves its suppression config per pair; the eager load
         // above still runs so an unreadable --config fails before any analysis.
-        return run_batch(&args, &outputs, &progress);
+        let result = run_batch(&args, &outputs, &progress);
+        metrics.duration_total_seconds.record(run_start.elapsed());
+        if let Some(ref path) = args.metrics_file {
+            if let Err(e) = soroban_upgrade_safeguard::metrics::write_metrics_file(&metrics, path) {
+                eprintln!("Warning: failed to write metrics file: {e}");
+            }
+        }
+        return result;
     }
 
-    run_single(&args, &outputs, &suppressions, &progress)
+    let result = run_single(&args, &outputs, &suppressions, &progress);
+    metrics.duration_total_seconds.record(run_start.elapsed());
+    if let Some(ref path) = args.metrics_file {
+        if let Err(e) = soroban_upgrade_safeguard::metrics::write_metrics_file(&metrics, path) {
+            eprintln!("Warning: failed to write metrics file: {e}");
+        }
+    }
+    result
 }
 
 /// The result of resolving a batch mode run out of its inputs: the composed

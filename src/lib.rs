@@ -112,6 +112,9 @@ mod lint;
 pub mod manifest;
 #[cfg(not(feature = "unstable"))]
 mod manifest;
+
+pub mod metrics;
+
 #[cfg(feature = "unstable")]
 pub mod metadata_cache;
 #[cfg(not(feature = "unstable"))]
