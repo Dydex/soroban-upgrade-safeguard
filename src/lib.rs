@@ -85,6 +85,7 @@ pub mod error;
 mod error;
 
 pub mod interface_hash;
+pub mod logging;
 
 #[cfg(feature = "unstable")]
 pub mod jsonl;
